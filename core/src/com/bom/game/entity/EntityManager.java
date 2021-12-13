@@ -1,5 +1,7 @@
 package com.bom.game.entity;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 
 public class EntityManager {
@@ -20,6 +22,23 @@ public class EntityManager {
 
     public void addBrick(Brick brick) {
         this.bricks.add(brick);
+    }
+
+    public void addEntity(EntityBase entityBase) {
+        this.entityBases.add(entityBase);
+    }
+
+    public boolean wallContainsPosition(Vector2 position) {
+        for (Wall wall : walls) {
+            if (wall.bounds.contains(position.x, position.y)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeEntity(EntityBase entityBase) {
+        this.entityBases.remove(entityBase);
     }
 
 }
