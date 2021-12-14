@@ -2,36 +2,150 @@ package com.bom.game.entity;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.bom.game.BomGame;
+import com.bom.game.animation.AnimationHandle;
+import com.bom.game.modules.BitCollision;
+import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
 
 public class Bomberman extends EntityBase implements Disposable {
 
     private World world;
     private ArrayList<Bomb> bombs;
-
+    private AnimationHandle animationHandle;
+    private float FRAME_TIME = 0.6f;
+    private float speed = 2.5f;
+    public Body body;
     private static BodyDef bDef = new BodyDef();
     private static FixtureDef fDef = new FixtureDef();
     private static CircleShape cShape = new CircleShape();
+    private String playerPath = "bomberman.atlas";
+    private Sprite sprite;
+    private GameScreen gameScreen;
 
     public Bomberman(GameScreen gameScreen, Vector2 position) {
         super(gameScreen.entityCreator.entityManager);
         this.world = gameScreen.getWorld();
         this.bombs = new ArrayList<Bomb>();
         this.type = EntityType.BOMBERMAN;
+        this.gameScreen = gameScreen;
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
+        animationHandle = new AnimationHandle();
+        animationHandle.addAnimation(State.WALK_DOWN.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_DOWN.getValue())));
+        animationHandle.addAnimation(State.WALK_LEFT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_LEFT.getValue())));
+        animationHandle.addAnimation(State.WALK_RIGHT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_RIGHT.getValue())));
+        animationHandle.addAnimation(State.WALK_UP.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_UP.getValue())));
+        animationHandle.addAnimation(State.DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.DEAD.getValue())));
+        animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+        sprite = new Sprite(animationHandle.getCurrentFrame());
+        sprite.setPosition(position.x, position.y);
+        definePlayer(position);
+    }
+
+    public void handleInput(float delta) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            animationHandle.setCurrentAnimation(State.WALK_UP.getValue());
+            this.body.setLinearVelocity(new Vector2(0, speed));
+            // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+            this.body.setLinearVelocity(new Vector2(0, -speed));
+            // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            animationHandle.setCurrentAnimation(State.WALK_LEFT.getValue());
+            this.body.setLinearVelocity(new Vector2(-speed, 0));
+            // this.body.applyLinearImpulse(new Vector2(-0.05f, 0), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            animationHandle.setCurrentAnimation(State.WALK_RIGHT.getValue());
+            this.body.setLinearVelocity(new Vector2(speed, 0));
+            // this.body.applyLinearImpulse(new Vector2(0.05f, 0), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+            this.body.setLinearVelocity(new Vector2(0, 0));
+        } else {
+            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+            this.body.setLinearVelocity(0, 0);
+        }
     }
 
 
+    public void update(float deltaTime) {
+        sprite.setBounds(
+                UnitHelper.box2DToScreen(body.getPosition().x,
+                        0.875f),
+                UnitHelper.box2DToScreen(body.getPosition().y,
+                        0.875f),
+                UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
+                UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
+        sprite.setPosition(
+                UnitHelper.box2DToScreen(body.getPosition().x,
+                        0.875f),
+                UnitHelper.box2DToScreen(body.getPosition().y,
+                        0.875f));
+        sprite.setRegion(animationHandle.getCurrentFrame());
+    }
+
+    public void render(SpriteBatch batch) {
+        sprite.draw(batch);
+    }
+
+    public void definePlayer(Vector2 position) {
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.position.set(
+                UnitHelper.coordScreenToBox2D(position.x, position.y, 0.875f / 2)
+        );
+        
+        body = world.createBody(bDef);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(0.875f / 2);
+        // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
+        fDef.filter.categoryBits = BitCollision.BOMBERMAN;
+        fDef.filter.maskBits = BitCollision.orOperation(
+                BitCollision.WALL,
+                BitCollision.BRICK,
+                BitCollision.BOMB,
+                BitCollision.FLAME
+        );
+        fDef.shape = shape;
+        // fdef.isSensor = true;
+        body.createFixture(fDef).setUserData("player");
+    }
 
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
 
+    }
+
+    private enum State {
+        IDLE("idle"), 
+        WALK_LEFT("walk_left"),  
+        WALK_RIGHT("walk_right"),
+        WALK_UP("walk_up"),
+        WALK_DOWN("walk_down"),
+        DEAD("dead");
+        private String value;
+        private State(String value) {
+            this.value = value;
+        }
+        public String getValue() {
+            return value;
+        }
     }
 
 }

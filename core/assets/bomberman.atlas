@@ -1,0 +1,118 @@
+
+bomberman.png
+size: 512, 32
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+dead
+  rotate: false
+  xy: 36, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 4
+dead
+  rotate: false
+  xy: 87, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 1
+dead
+  rotate: false
+  xy: 138, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 3
+dead
+  rotate: false
+  xy: 223, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 2
+walk_down
+  rotate: false
+  xy: 2, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 2
+walk_down
+  rotate: false
+  xy: 104, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 1
+walk_down
+  rotate: false
+  xy: 189, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 3
+walk_left
+  rotate: false
+  xy: 70, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 3
+walk_left
+  rotate: false
+  xy: 172, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 2
+walk_left
+  rotate: false
+  xy: 257, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 1
+walk_right
+  rotate: false
+  xy: 19, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 2
+walk_right
+  rotate: false
+  xy: 121, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 1
+walk_right
+  rotate: false
+  xy: 206, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 3
+walk_up
+  rotate: false
+  xy: 53, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 3
+walk_up
+  rotate: false
+  xy: 155, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 2
+walk_up
+  rotate: false
+  xy: 240, 2
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: 1
