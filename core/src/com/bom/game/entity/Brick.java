@@ -10,3 +10,4 @@ public class Brick extends Wall {
     // TODO Auto-generated constructor stub
   }
 }
+
