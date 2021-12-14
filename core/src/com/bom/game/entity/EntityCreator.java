@@ -11,6 +11,7 @@ import com.bom.game.modules.Paths;
 import com.bom.game.screen.GameScreen;
 
 public class EntityCreator {
+    
     private GameScreen gameScreen;
     public EntityManager entityManager;
     private static BodyDef bDef;

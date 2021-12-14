@@ -12,17 +12,19 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bom.game.BomGame;
+import com.bom.game.entity.Bomberman;
 import com.bom.game.entity.EntityCreator;
 
 public class GameScreen implements Screen {
 
-    private World world;
+    public World world;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
     private Viewport viewport;
     private BomGame bomGame;
     public final EntityCreator entityCreator;
+    private Bomberman bomberman;
 
     public GameScreen(BomGame bomGame) {
         this.bomGame = bomGame;
@@ -34,12 +36,14 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / BomGame.PPM);
         entityCreator = new EntityCreator(this);
         entityCreator.createEntity();
+        bomberman = new Bomberman(this, new Vector2(8, 8));
     }
 
-    private void update() {
+    private void update(float delta) {
         world.step(1 / 60f, 6, 2);
         renderer.setView(camera);
-
+        bomberman.handleInput(delta);
+        bomberman.update(delta);
     }
 
     public TiledMap getMap() {
@@ -59,10 +63,12 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        update();
+        update(delta);
         renderer.render();
         bomGame.batch.setProjectionMatrix(camera.combined);
         bomGame.batch.begin();
+        bomberman.render(bomGame.batch);
+        
         bomGame.batch.end();
     }
 
