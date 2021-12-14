@@ -1,5 +1,5 @@
 
-package com.bom.game.utils;
+package com.bom.game.modules;
 
 import com.badlogic.gdx.math.Vector2;
 import com.bom.game.BomGame;

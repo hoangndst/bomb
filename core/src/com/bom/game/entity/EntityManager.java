@@ -30,7 +30,7 @@ public class EntityManager {
 
     public boolean wallContainsPosition(Vector2 position) {
         for (Wall wall : walls) {
-            if (wall.bounds.contains(position.x, position.y)) {
+            if (wall.getBounds().contains(position.x, position.y)) {
                 return true;
             }
         }
