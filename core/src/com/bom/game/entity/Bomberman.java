@@ -26,17 +26,22 @@ public class Bomberman extends EntityBase implements Disposable {
 
     private World world;
     private ArrayList<Bomb> bombs;
+    private int bombCount = 1;
+    private int flameLength = 3;
     private AnimationHandle animationHandle;
     private float FRAME_TIME = 0.6f;
     private float speed = 2.5f;
     public Body body;
     private static BodyDef bDef = new BodyDef();
     private static FixtureDef fDef = new FixtureDef();
-    private static CircleShape cShape = new CircleShape();
     private String playerPath = "bomberman.atlas";
     private Sprite sprite;
     private GameScreen gameScreen;
-
+    private State direction = State.IDLE_DOWN;
+    private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
+    private boolean canPlaceBombs = true;
+    private BombPool bombPool;
+    
     public Bomberman(GameScreen gameScreen, Vector2 position) {
         super(gameScreen.entityCreator.entityManager);
         this.world = gameScreen.getWorld();
@@ -49,8 +54,12 @@ public class Bomberman extends EntityBase implements Disposable {
         animationHandle.addAnimation(State.WALK_LEFT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_LEFT.getValue())));
         animationHandle.addAnimation(State.WALK_RIGHT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_RIGHT.getValue())));
         animationHandle.addAnimation(State.WALK_UP.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_UP.getValue())));
+        animationHandle.addAnimation(State.IDLE_DOWN.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_DOWN.getValue())));
+        animationHandle.addAnimation(State.IDLE_LEFT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_LEFT.getValue())));
+        animationHandle.addAnimation(State.IDLE_RIGHT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_RIGHT.getValue())));
+        animationHandle.addAnimation(State.IDLE_UP.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_UP.getValue())));
         animationHandle.addAnimation(State.DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.DEAD.getValue())));
-        animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+        animationHandle.setCurrentAnimation(State.IDLE_DOWN.getValue());
         sprite = new Sprite(animationHandle.getCurrentFrame());
         sprite.setPosition(position.x, position.y);
         definePlayer(position);
@@ -60,25 +69,49 @@ public class Bomberman extends EntityBase implements Disposable {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             animationHandle.setCurrentAnimation(State.WALK_UP.getValue());
             this.body.setLinearVelocity(new Vector2(0, speed));
+            direction = State.IDLE_UP;
             // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
             this.body.setLinearVelocity(new Vector2(0, -speed));
+            direction = State.IDLE_DOWN;
             // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             animationHandle.setCurrentAnimation(State.WALK_LEFT.getValue());
             this.body.setLinearVelocity(new Vector2(-speed, 0));
+            direction = State.IDLE_LEFT;
             // this.body.applyLinearImpulse(new Vector2(-0.05f, 0), this.body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             animationHandle.setCurrentAnimation(State.WALK_RIGHT.getValue());
             this.body.setLinearVelocity(new Vector2(speed, 0));
+            direction = State.IDLE_RIGHT;
             // this.body.applyLinearImpulse(new Vector2(0.05f, 0), this.body.getWorldCenter(), true);
         } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+            checkExplodeBrick(delta);
             this.body.setLinearVelocity(new Vector2(0, 0));
         } else {
-            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+            animationHandle.setCurrentAnimation(direction.getValue());
             this.body.setLinearVelocity(0, 0);
+        }
+    }
+
+    private void checkExplodeBrick(float deltaTime) {
+        if (!canPlaceBombs) {
+            bombCooldownTimer -= deltaTime;
+            if (bombCooldownTimer < 0) canPlaceBombs = true;
+        }
+        
+        if (this.bombCount > 0 && canPlaceBombs) {
+            Bomb bomb = new Bomb(this.gameScreen, this.body.getPosition());
+            // bomb.init(
+            //         bombermanOwner,
+            //         UnitHelper.coordBox2DSnapToGrid(bombermanOwner.physicsComponent.body.getPosition()),
+            //         bombermanOwner.firePower
+            // );
+            bombs.add(bomb);
+            bombCount--;
+            canPlaceBombs = false;
+            bombCooldownTimer = bombCooldown;
         }
     }
 
@@ -97,10 +130,16 @@ public class Bomberman extends EntityBase implements Disposable {
                 UnitHelper.box2DToScreen(body.getPosition().y,
                         0.875f));
         sprite.setRegion(animationHandle.getCurrentFrame());
+        for (Bomb bomb : bombs) {
+            bomb.update(deltaTime);
+        }
     }
 
     public void render(SpriteBatch batch) {
         sprite.draw(batch);
+        for (Bomb bomb : bombs) {
+            bomb.render(batch);
+        }
     }
 
     public void definePlayer(Vector2 position) {
@@ -128,12 +167,17 @@ public class Bomberman extends EntityBase implements Disposable {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-
+        sprite.getTexture().dispose();
+        for (Bomb bomb : bombs) {
+            bomb.dispose();
+        }
     }
 
     private enum State {
-        IDLE("idle"), 
+        IDLE_UP("idle_up"),
+        IDLE_DOWN("idle_down"),
+        IDLE_LEFT("idle_left"),
+        IDLE_RIGHT("idle_right"), 
         WALK_LEFT("walk_left"),  
         WALK_RIGHT("walk_right"),
         WALK_UP("walk_up"),
