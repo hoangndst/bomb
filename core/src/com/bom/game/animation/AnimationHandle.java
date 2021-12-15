@@ -1,70 +1,68 @@
 package com.bom.game.animation;
 
 import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AnimationHandle {
-    
-    private float timer = 0;
-    private String currentAnimation = "";
-    private boolean looping = true;
-    private final HashMap<String, Animation<TextureRegion>> animations = new HashMap<String, Animation<TextureRegion>>();
 
-    public void addAnimation(String name, Animation<TextureRegion> animation) {
-        animations.put(name, animation);
-    }
+  private float timer = 0;
+  private String currentAnimation = "";
+  private boolean looping = true;
+  private final HashMap<String, Animation<TextureRegion>> animations =
+      new HashMap<String, Animation<TextureRegion>>();
 
-    public void setCurrentAnimation(String name) {
-        if (currentAnimation.equals(name)) {
-            return;
-        }
-        currentAnimation = name;
-        timer = 0;
-        looping = true;
-    }
+  public void addAnimation(String name, Animation<TextureRegion> animation) {
+    animations.put(name, animation);
+  }
 
-    public void setCurrentAnimation(String name, boolean looping) {
-        setCurrentAnimation(name);
-        this.looping = looping;
+  public void setCurrentAnimation(String name) {
+    if (currentAnimation.equals(name)) {
+      return;
     }
+    currentAnimation = name;
+    timer = 0;
+    looping = true;
+  }
 
-    public void setAnimationDuration(long duration) {
-        animations.get(currentAnimation).setFrameDuration(duration / ((float) animations.get(currentAnimation).getKeyFrames().length * 1000));
-    }
+  public void setCurrentAnimation(String name, boolean looping) {
+    setCurrentAnimation(name);
+    this.looping = looping;
+  }
 
-    public boolean isCurrentAnimation(String name) {
-        return currentAnimation.equals(name);
-    }
+  public void setAnimationDuration(long duration) {
+    animations.get(currentAnimation).setFrameDuration(
+        duration / ((float) animations.get(currentAnimation).getKeyFrames().length * 1000));
+  }
 
-    public boolean isFinished() {
-        return animations.get(currentAnimation).isAnimationFinished(timer);
-    }
+  public boolean isCurrentAnimation(String name) {
+    return currentAnimation.equals(name);
+  }
 
-    public int getCurrentFrameIndex() {
-        return animations.get(currentAnimation).getKeyFrameIndex(timer);
-    }
+  public boolean isFinished() {
+    return animations.get(currentAnimation).isAnimationFinished(timer);
+  }
 
-    public void setFrameToLeft() {
-        for (TextureRegion textureRegion : animations.get(currentAnimation).getKeyFrames()) {
-            textureRegion.flip(true, false);
-        }
-    }
+  public int getCurrentFrameIndex() {
+    return animations.get(currentAnimation).getKeyFrameIndex(timer);
+  }
 
-    public TextureRegion getCurrentFrame() {
-        timer += Gdx.graphics.getDeltaTime();
-        return animations.get(currentAnimation).getKeyFrame(timer, looping);
+  public void setFrameToLeft() {
+    for (TextureRegion textureRegion : animations.get(currentAnimation).getKeyFrames()) {
+      textureRegion.flip(true, false);
     }
+  }
 
-    @Override
-    public String toString() {
-        return "AnimationHandler{" +
-                "timer=" + timer +
-                ", looping=" + looping +
-                ", current='" + currentAnimation + '\'' +
-                ", frame=" + animations.get(currentAnimation).getKeyFrameIndex(timer) +
-                '}';
-    }
+  public TextureRegion getCurrentFrame() {
+    timer += Gdx.graphics.getDeltaTime();
+    return animations.get(currentAnimation).getKeyFrame(timer, looping);
+  }
+
+  @Override
+  public String toString() {
+    return "AnimationHandler{" + "timer=" + timer + ", looping=" + looping + ", current='"
+        + currentAnimation + '\'' + ", frame="
+        + animations.get(currentAnimation).getKeyFrameIndex(timer) + '}';
+  }
 }
