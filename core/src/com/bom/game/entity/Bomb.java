@@ -32,14 +32,14 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 	private String playerPath = "bomb.atlas";
 	private Sprite sprite;
 	private float countDown = 2f;
-	private float bodyDiameter = 0.875f;
-	private boolean sensorFlag = true;
+	private float bodyDiameter = 0.9f;
+	public boolean sensorFlag = true;
 	private Bomberman bombOwner;
 	public float timeRemove;
   // private State direction = State.IDLE_DOWN;
 
   	public Bomb() {
-		timeRemove = 1f;
+		timeRemove = 0.8f;
 		canDestroy = false;
 		flames = new ArrayList<Flame>();
 		this.type = EntityType.BOMB;
@@ -54,7 +54,6 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 	}
 
 	public void init(Bomberman bombOwner, Vector2 position, int flameLength) {
-
 		this.bombOwner = bombOwner;
 		this.world = bombOwner.getWorld();
 		this.flameLength = flameLength;
@@ -70,7 +69,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 		bDef.fixedRotation = true;
 		body = world.createBody(bDef);
 		CircleShape cShape = new CircleShape();
-		cShape.setRadius(bodyDiameter / 2);
+		cShape.setRadius(0.9f / 2);
 		fDef = new FixtureDef();
 		fDef.shape = cShape;
 		fDef.isSensor = true;
@@ -78,12 +77,14 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 		fDef.filter.maskBits = BitCollision.orOperation(BitCollision.BOMBERMAN, BitCollision.WALL,
 			BitCollision.BRICK, BitCollision.BOMB, BitCollision.FLAME);
 
-		body.createFixture(fDef).setUserData("bomb");
+		body.createFixture(fDef).setUserData(this);
 	}
 
 	private void willExplode(float delta) {
 		countDown -= delta;
 		if (countDown <= 0 && !canDestroy) {
+			this.body.setLinearVelocity(new Vector2(0, 0));
+			bDef.position.set(UnitHelper.coordScreenToBox2D((int)(body.getPosition().x), (int)(body.getPosition().y), 0));
 			explode();
 		}
 	}
@@ -182,5 +183,9 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 
 	public EntityManager getEntityManager() {
 		return this.entityManager;
+	}
+
+	public ArrayList<Flame> getFlames() {
+		return this.flames;
 	}
 }

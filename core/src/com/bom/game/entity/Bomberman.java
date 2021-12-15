@@ -39,11 +39,13 @@ public class Bomberman extends EntityBase implements Disposable {
     private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
     private boolean canPlaceBombs = true;
     private BombPool bombPool;
-    public float time = 3;
+    public float time = 0.8f;
+    private Vector2 initPosition;
 
     public Bomberman(GameScreen gameScreen, Vector2 position) {
         super(gameScreen.entityCreator.entityManager);
         this.bombPool = gameScreen.getBombPool();
+        canDestroy = false;
         this.world = gameScreen.getWorld();
         this.bombs = new ArrayList<Bomb>();
         this.type = EntityType.BOMBERMAN;
@@ -72,31 +74,36 @@ public class Bomberman extends EntityBase implements Disposable {
         sprite = new Sprite(animationHandle.getCurrentFrame());
         sprite.setPosition(position.x, position.y);
         definePlayer(position);
+        this.initPosition = position;
     }
 
     public void handleInput(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            animationHandle.setCurrentAnimation(State.WALK_UP.getValue());
-            this.body.setLinearVelocity(new Vector2(0, speed));
-            direction = State.IDLE_UP;
-        // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-        animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
-            this.body.setLinearVelocity(new Vector2(0, -speed));
-            direction = State.IDLE_DOWN;
-        // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            animationHandle.setCurrentAnimation(State.WALK_LEFT.getValue());
-            this.body.setLinearVelocity(new Vector2(-speed, 0));
-            direction = State.IDLE_LEFT;
-        // this.body.applyLinearImpulse(new Vector2(-0.05f, 0), this.body.getWorldCenter(), true);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            animationHandle.setCurrentAnimation(State.WALK_RIGHT.getValue());
-            this.body.setLinearVelocity(new Vector2(speed, 0));
-            direction = State.IDLE_RIGHT;
-        // this.body.applyLinearImpulse(new Vector2(0.05f, 0), this.body.getWorldCenter(), true);
+        if (!canDestroy) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                animationHandle.setCurrentAnimation(State.WALK_UP.getValue());
+                this.body.setLinearVelocity(new Vector2(0, speed));
+                direction = State.IDLE_UP;
+            // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+                this.body.setLinearVelocity(new Vector2(0, -speed));
+                direction = State.IDLE_DOWN;
+            // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                animationHandle.setCurrentAnimation(State.WALK_LEFT.getValue());
+                this.body.setLinearVelocity(new Vector2(-speed, 0));
+                direction = State.IDLE_LEFT;
+            // this.body.applyLinearImpulse(new Vector2(-0.05f, 0), this.body.getWorldCenter(), true);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                animationHandle.setCurrentAnimation(State.WALK_RIGHT.getValue());
+                this.body.setLinearVelocity(new Vector2(speed, 0));
+                direction = State.IDLE_RIGHT;
+            // this.body.applyLinearImpulse(new Vector2(0.05f, 0), this.body.getWorldCenter(), true);
+            } else {
+                animationHandle.setCurrentAnimation(direction.getValue());
+                this.body.setLinearVelocity(0, 0);
+            }
         } else {
-            animationHandle.setCurrentAnimation(direction.getValue());
             this.body.setLinearVelocity(0, 0);
         }
     }
@@ -136,6 +143,12 @@ public class Bomberman extends EntityBase implements Disposable {
         for (Bomb bomb : bombs) {
             bomb.update(deltaTime);
         }
+        if (canDestroy) {
+            time -= deltaTime;
+            animationHandle.setCurrentAnimation(State.DEAD.getValue());
+            dead();
+        }
+        
     }
 
     public void render(SpriteBatch batch) {
@@ -143,6 +156,16 @@ public class Bomberman extends EntityBase implements Disposable {
             bomb.render(batch);
         }
         sprite.draw(batch);
+    }
+
+    public void dead() {
+        if (time <= 0) {
+            this.world.destroyBody(this.body);
+            definePlayer(initPosition);
+            this.direction = State.IDLE_DOWN;
+            canDestroy = false;
+            time = 0.8f;
+        }
     }
 
     public void definePlayer(Vector2 position) {
@@ -159,7 +182,7 @@ public class Bomberman extends EntityBase implements Disposable {
             BitCollision.BOMB, BitCollision.FLAME);
         fDef.shape = shape;
         // fdef.isSensor = true;
-        body.createFixture(fDef).setUserData("player");
+        body.createFixture(fDef).setUserData(this);
     }
 
     @Override

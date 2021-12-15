@@ -9,8 +9,8 @@ public class Paths {
     
     //Tiled Layers
     public static final String tiledBackgroundLayer = "background";
-    public static final String tiledWallsLayer = "walls";
-    public static final String tiledChestsLayer = "chests";
+    public static final String tiledWallsLayer = "wall";
+    public static final String tiledChestsLayer = "brick";
     public static final String tiledMagnetsLayer = "magnets";
     public static final String tiledKeysLayer = "keys";
     

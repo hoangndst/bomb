@@ -1,9 +1,13 @@
 package com.bom.game.entity;
 
+import java.util.concurrent.TimeUnit;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.modules.Paths;
 import com.bom.game.modules.TileId;
@@ -20,22 +24,24 @@ public class Brick extends TileBase {
         setCollisionFilter(BitCollision.BRICK,
             BitCollision.orOperation(
             BitCollision.BOMBERMAN,
-            BitCollision.BOMB
+            BitCollision.BOMB,
+            BitCollision.FLAME
         ));
 
     }
 
     private TiledMapTileLayer.Cell getCell() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(Paths.tiledBackgroundLayer);
-        return layer.getCell(UnitHelper.snapMetersToGrid(bounds.x), UnitHelper.snapMetersToGrid(bounds.y));
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("background");
+        // System.err.println((int) body.getPosition().x + ", " +  (int) body.getPosition().y);
+        return layer.getCell((int) body.getPosition().x, (int) body.getPosition().y);
+
     }
 
     public void handleBom() {
-        getCell().setTile(tileSet.getTile(TileId.DESTROYED_BRICK));
+        getCell().setTile(null);
         Filter newFilter = new Filter();
         newFilter.categoryBits = BitCollision.DESTROYED_BRICK;
         newFilter.maskBits = fixture.getFilterData().maskBits;
-        
         fixture.setFilterData(newFilter);
     }
 }
