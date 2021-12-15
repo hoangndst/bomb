@@ -22,173 +22,187 @@ import com.bom.game.screen.GameScreen;
 
 public class Bomberman extends EntityBase implements Disposable {
 
-  private World world;
-  private ArrayList<Bomb> bombs;
-  private int bombCount = 1;
-  private int flameLength = 3;
-  private AnimationHandle animationHandle;
-  private float FRAME_TIME = 0.6f;
-  private float speed = 2.5f;
-  public Body body;
-  private static BodyDef bDef = new BodyDef();
-  private static FixtureDef fDef = new FixtureDef();
-  private String playerPath = "bomberman.atlas";
-  private Sprite sprite;
-  private GameScreen gameScreen;
-  private State direction = State.IDLE_DOWN;
-  private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
-  private boolean canPlaceBombs = true;
-  private BombPool bombPool;
+    private World world;
+    private ArrayList<Bomb> bombs;
+    private int bombCount = 3;
+    private int flameLength = 3;
+    private AnimationHandle animationHandle;
+    private float FRAME_TIME = 0.6f;
+    private float speed = 2.5f;
+    public Body body;
+    private static BodyDef bDef = new BodyDef();
+    private static FixtureDef fDef = new FixtureDef();
+    private String playerPath = "bomberman.atlas";
+    private Sprite sprite;
+    private GameScreen gameScreen;
+    private State direction = State.IDLE_DOWN;
+    private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
+    private boolean canPlaceBombs = true;
+    private BombPool bombPool;
+    public float time = 3;
 
-  public Bomberman(GameScreen gameScreen, Vector2 position) {
-    super(gameScreen.entityCreator.entityManager);
-    this.bombPool = gameScreen.getBombPool();
-    this.world = gameScreen.getWorld();
-    this.bombs = new ArrayList<Bomb>();
-    this.type = EntityType.BOMBERMAN;
-    this.gameScreen = gameScreen;
-    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
-    animationHandle = new AnimationHandle();
-    animationHandle.addAnimation(State.WALK_DOWN.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_DOWN.getValue())));
-    animationHandle.addAnimation(State.WALK_LEFT.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_LEFT.getValue())));
-    animationHandle.addAnimation(State.WALK_RIGHT.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_RIGHT.getValue())));
-    animationHandle.addAnimation(State.WALK_UP.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_UP.getValue())));
-    animationHandle.addAnimation(State.IDLE_DOWN.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_DOWN.getValue())));
-    animationHandle.addAnimation(State.IDLE_LEFT.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_LEFT.getValue())));
-    animationHandle.addAnimation(State.IDLE_RIGHT.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_RIGHT.getValue())));
-    animationHandle.addAnimation(State.IDLE_UP.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_UP.getValue())));
-    animationHandle.addAnimation(State.DEAD.getValue(),
-        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.DEAD.getValue())));
-    animationHandle.setCurrentAnimation(State.IDLE_DOWN.getValue());
-    sprite = new Sprite(animationHandle.getCurrentFrame());
-    sprite.setPosition(position.x, position.y);
-    definePlayer(position);
-  }
-
-  public void handleInput(float delta) {
-    if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-      animationHandle.setCurrentAnimation(State.WALK_UP.getValue());
-      this.body.setLinearVelocity(new Vector2(0, speed));
-      direction = State.IDLE_UP;
-      // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
-    } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-      animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
-      this.body.setLinearVelocity(new Vector2(0, -speed));
-      direction = State.IDLE_DOWN;
-      // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
-    } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-      animationHandle.setCurrentAnimation(State.WALK_LEFT.getValue());
-      this.body.setLinearVelocity(new Vector2(-speed, 0));
-      direction = State.IDLE_LEFT;
-      // this.body.applyLinearImpulse(new Vector2(-0.05f, 0), this.body.getWorldCenter(), true);
-    } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-      animationHandle.setCurrentAnimation(State.WALK_RIGHT.getValue());
-      this.body.setLinearVelocity(new Vector2(speed, 0));
-      direction = State.IDLE_RIGHT;
-      // this.body.applyLinearImpulse(new Vector2(0.05f, 0), this.body.getWorldCenter(), true);
-    } else {
-      animationHandle.setCurrentAnimation(direction.getValue());
-      this.body.setLinearVelocity(0, 0);
-    }
-  }
-
-  private void checkExplode(float deltaTime) {
-    if (!canPlaceBombs) {
-      bombCooldownTimer -= deltaTime;
-      if (bombCooldownTimer < 0)
-        canPlaceBombs = true;
-    }
-    if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-      if (this.bombCount > 0 && canPlaceBombs) {
-        Bomb bomb = bombPool.get().obtain();
-        bomb.init(this, UnitHelper.coordBox2DSnapToGrid(body.getPosition()), flameLength);
-        // Bomb bomb = new Bomb(this.gameScreen,
-        // UnitHelper.coordBox2DSnapToGrid(body.getPosition()));
-        bombs.add(bomb);
-        bombCount--;
-        canPlaceBombs = false;
-        bombCooldownTimer = bombCooldown;
-      }
-    }
-  }
-
-
-  public void update(float deltaTime) {
-    handleInput(deltaTime);
-    checkExplode(deltaTime);
-    sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-        UnitHelper.box2DToScreen(body.getPosition().y, 0.875f),
-        UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
-        UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
-    sprite.setPosition(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-        UnitHelper.box2DToScreen(body.getPosition().y, 0.875f));
-    sprite.setRegion(animationHandle.getCurrentFrame());
-    for (Bomb bomb : bombs) {
-      bomb.update(deltaTime);
-    }
-  }
-
-  public void render(SpriteBatch batch) {
-    for (Bomb bomb : bombs) {
-      bomb.render(batch);
-    }
-    sprite.draw(batch);
-  }
-
-  public void definePlayer(Vector2 position) {
-    bDef.type = BodyDef.BodyType.DynamicBody;
-    bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y, 0.875f / 2));
-
-    body = world.createBody(bDef);
-
-    CircleShape shape = new CircleShape();
-    shape.setRadius(0.875f / 2);
-    // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
-    fDef.filter.categoryBits = BitCollision.BOMBERMAN;
-    fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
-        BitCollision.BOMB, BitCollision.FLAME);
-    fDef.shape = shape;
-    // fdef.isSensor = true;
-    body.createFixture(fDef).setUserData("player");
-  }
-
-  @Override
-  public void dispose() {
-    sprite.getTexture().dispose();
-    for (Bomb bomb : bombs) {
-      bomb.dispose();
-    }
-  }
-
-  private enum State {
-    IDLE_UP("idle_up"), IDLE_DOWN("idle_down"), IDLE_LEFT("idle_left"), IDLE_RIGHT(
-        "idle_right"), WALK_LEFT("walk_left"), WALK_RIGHT(
-            "walk_right"), WALK_UP("walk_up"), WALK_DOWN("walk_down"), DEAD("dead");
-    private String value;
-
-    private State(String value) {
-      this.value = value;
+    public Bomberman(GameScreen gameScreen, Vector2 position) {
+        super(gameScreen.entityCreator.entityManager);
+        this.bombPool = gameScreen.getBombPool();
+        this.world = gameScreen.getWorld();
+        this.bombs = new ArrayList<Bomb>();
+        this.type = EntityType.BOMBERMAN;
+        this.gameScreen = gameScreen;
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
+        animationHandle = new AnimationHandle();
+        animationHandle.addAnimation(State.WALK_DOWN.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_DOWN.getValue())));
+        animationHandle.addAnimation(State.WALK_LEFT.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_LEFT.getValue())));
+        animationHandle.addAnimation(State.WALK_RIGHT.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_RIGHT.getValue())));
+        animationHandle.addAnimation(State.WALK_UP.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.WALK_UP.getValue())));
+        animationHandle.addAnimation(State.IDLE_DOWN.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_DOWN.getValue())));
+        animationHandle.addAnimation(State.IDLE_LEFT.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_LEFT.getValue())));
+        animationHandle.addAnimation(State.IDLE_RIGHT.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_RIGHT.getValue())));
+        animationHandle.addAnimation(State.IDLE_UP.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_UP.getValue())));
+        animationHandle.addAnimation(State.DEAD.getValue(),
+            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.DEAD.getValue())));
+        animationHandle.setCurrentAnimation(State.IDLE_DOWN.getValue());
+        sprite = new Sprite(animationHandle.getCurrentFrame());
+        sprite.setPosition(position.x, position.y);
+        definePlayer(position);
     }
 
-    public String getValue() {
-      return value;
+    public void handleInput(float delta) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            animationHandle.setCurrentAnimation(State.WALK_UP.getValue());
+            this.body.setLinearVelocity(new Vector2(0, speed));
+            direction = State.IDLE_UP;
+        // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+            this.body.setLinearVelocity(new Vector2(0, -speed));
+            direction = State.IDLE_DOWN;
+        // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            animationHandle.setCurrentAnimation(State.WALK_LEFT.getValue());
+            this.body.setLinearVelocity(new Vector2(-speed, 0));
+            direction = State.IDLE_LEFT;
+        // this.body.applyLinearImpulse(new Vector2(-0.05f, 0), this.body.getWorldCenter(), true);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            animationHandle.setCurrentAnimation(State.WALK_RIGHT.getValue());
+            this.body.setLinearVelocity(new Vector2(speed, 0));
+            direction = State.IDLE_RIGHT;
+        // this.body.applyLinearImpulse(new Vector2(0.05f, 0), this.body.getWorldCenter(), true);
+        } else {
+            animationHandle.setCurrentAnimation(direction.getValue());
+            this.body.setLinearVelocity(0, 0);
+        }
     }
-  }
 
-  public World getWorld() {
-    return this.world;
-  }
+    private void checkExplode(float deltaTime) {
+        if (!canPlaceBombs) {
+            bombCooldownTimer -= deltaTime;
+        if (bombCooldownTimer < 0)
+            canPlaceBombs = true;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && canPlaceBombs) {
+            if (this.bombCount > 0 && canPlaceBombs) {
+                Bomb bomb = bombPool.get().obtain();
+                bomb = new Bomb();
+                bomb.init(this, UnitHelper.coordBox2DSnapToGrid(body.getPosition()), flameLength);
+                // Bomb bomb = new Bomb(this.gameScreen,
+                // UnitHelper.coordBox2DSnapToGrid(body.getPosition()));
+                bombs.add(bomb);
+                bombCount--;
+                canPlaceBombs = false;
+                bombCooldownTimer = bombCooldown;
+            }
+        }
+    }
 
-  public void recoverBomb() {
-    bombCount++;
-  }
+
+    public void update(float deltaTime) {
+        handleInput(deltaTime);
+        checkExplode(deltaTime);
+        sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
+            UnitHelper.box2DToScreen(body.getPosition().y, 0.875f),
+            UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
+            UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
+        sprite.setPosition(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
+            UnitHelper.box2DToScreen(body.getPosition().y, 0.875f));
+        sprite.setRegion(animationHandle.getCurrentFrame());
+        for (Bomb bomb : bombs) {
+            bomb.update(deltaTime);
+        }
+    }
+
+    public void render(SpriteBatch batch) {
+        for (Bomb bomb : bombs) {
+            bomb.render(batch);
+        }
+        sprite.draw(batch);
+    }
+
+    public void definePlayer(Vector2 position) {
+        bDef.type = BodyDef.BodyType.DynamicBody;
+        bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y, 0.875f / 2));
+
+        body = world.createBody(bDef);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(0.875f / 2);
+        // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
+        fDef.filter.categoryBits = BitCollision.BOMBERMAN;
+        fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
+            BitCollision.BOMB, BitCollision.FLAME);
+        fDef.shape = shape;
+        // fdef.isSensor = true;
+        body.createFixture(fDef).setUserData("player");
+    }
+
+    @Override
+    public void dispose() {
+        sprite.getTexture().dispose();
+        for (Bomb bomb : bombs) {
+            bomb.dispose();
+        }
+    }
+
+    private enum State {
+
+        IDLE_UP("idle_up"), 
+        IDLE_DOWN("idle_down"), 
+        IDLE_LEFT("idle_left"), 
+        IDLE_RIGHT("idle_right"), 
+        WALK_LEFT("walk_left"), 
+        WALK_RIGHT("walk_right"), 
+        WALK_UP("walk_up"), 
+        WALK_DOWN("walk_down"), 
+        DEAD("dead");
+
+        private String value;
+
+        private State(String value) {
+        this.value = value;
+        }
+
+        public String getValue() {
+        return value;
+        }
+    }
+
+    public World getWorld() {
+        return this.world;
+    }
+
+    public void recoverBomb() {
+        bombCount++;
+    }
+
+    public ArrayList<Bomb> getBombs() {
+        return bombs;
+    }
 
 }

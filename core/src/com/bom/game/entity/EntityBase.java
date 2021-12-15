@@ -21,8 +21,8 @@ public abstract class EntityBase {
     }
 
     public void removeFromEntityManager() {
-        this.entityManager = null;
         entityManager.removeEntity(this);
+        this.entityManager = null;
     }
 
     public enum EntityType {
