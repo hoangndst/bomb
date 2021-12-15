@@ -21,171 +21,178 @@ import com.bom.game.modules.UnitHelper;
 
 public class Bomb extends EntityBase implements Poolable, Disposable {
 
-	public World world;
-	private int flameLength;
-	private ArrayList<Flame> flames;
-	private AnimationHandle animationHandle;
-	private float FRAME_TIME = 0.6f;
-	public Body body;
-	private static BodyDef bDef = new BodyDef();
-	private static FixtureDef fDef = new FixtureDef();
-	private String playerPath = "bomb.atlas";
-	private Sprite sprite;
-	private float countDown = 2f;
-	private float bodyDiameter = 0.9f;
-	public boolean sensorFlag = true;
-	private Bomberman bombOwner;
-	public float timeRemove;
-  // private State direction = State.IDLE_DOWN;
+  public World world;
+  private int flameLength;
+  private ArrayList<Flame> flames;
+  private AnimationHandle animationHandle;
+  private float FRAME_TIME = 0.6f;
+  public Body body;
+  private static BodyDef bDef = new BodyDef();
+  private static FixtureDef fDef = new FixtureDef();
+  private String playerPath = "bomb.atlas";
+  private Sprite sprite;
+  private float countDown = 2f;
+  private float bodyDiameter = 0.97f;
+  public boolean sensorFlag = true;
+  private Bomberman bombOwner;
+  public float timeRemove;
 
-  	public Bomb() {
-		timeRemove = 0.8f;
-		canDestroy = false;
-		flames = new ArrayList<Flame>();
-		this.type = EntityType.BOMB;
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
-		animationHandle = new AnimationHandle();
-		animationHandle.addAnimation(State.BOMB_IDLE.getValue(),
-			new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BOMB_IDLE.getValue())));
-		animationHandle.addAnimation(State.BOMB_EXPLODE.getValue(),
-			new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BOMB_EXPLODE.getValue())));
-		animationHandle.setCurrentAnimation(State.BOMB_IDLE.getValue());
-		sprite = new Sprite(animationHandle.getCurrentFrame());
-	}
+  public Bomb() {
+    timeRemove = 0.8f;
+    canDestroy = false;
+    flames = new ArrayList<Flame>();
+    this.type = EntityType.BOMB;
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
+    animationHandle = new AnimationHandle();
+    animationHandle.addAnimation(State.BOMB_IDLE.getValue(),
+        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BOMB_IDLE.getValue())));
+    animationHandle.addAnimation(State.BOMB_EXPLODE.getValue(),
+        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BOMB_EXPLODE.getValue())));
+    animationHandle.setCurrentAnimation(State.BOMB_IDLE.getValue());
+    sprite = new Sprite(animationHandle.getCurrentFrame());
+  }
 
-	public void init(Bomberman bombOwner, Vector2 position, int flameLength) {
-		this.bombOwner = bombOwner;
-		this.world = bombOwner.getWorld();
-		this.flameLength = flameLength;
-		addToEntityManager(bombOwner.entityManager);
-		sprite.setPosition(position.x, position.y);
-		defineBomb(position);
-	}
+  public void init(Bomberman bombOwner, Vector2 position, int flameLength) {
+    this.bombOwner = bombOwner;
+    this.world = bombOwner.getWorld();
+    this.flameLength = flameLength;
+    addToEntityManager(bombOwner.entityManager);
+    sprite.setPosition(position.x, position.y);
+    defineBomb(position);
+  }
 
-	private void defineBomb(Vector2 position) {
-		bDef = new BodyDef();
-		bDef.type = BodyDef.BodyType.DynamicBody;
-		bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y, bodyDiameter / 2));
-		bDef.fixedRotation = true;
-		body = world.createBody(bDef);
-		CircleShape cShape = new CircleShape();
-		cShape.setRadius(0.9f / 2);
-		fDef = new FixtureDef();
-		fDef.shape = cShape;
-		fDef.isSensor = true;
-		fDef.filter.categoryBits = BitCollision.BOMB;
-		fDef.filter.maskBits = BitCollision.orOperation(BitCollision.BOMBERMAN, BitCollision.WALL,
-			BitCollision.BRICK, BitCollision.BOMB, BitCollision.FLAME);
+  private void defineBomb(Vector2 position) {
+    bDef = new BodyDef();
+    bDef.type = BodyDef.BodyType.DynamicBody;
+    bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y, bodyDiameter / 2));
+    bDef.fixedRotation = true;
+    body = world.createBody(bDef);
+    CircleShape cShape = new CircleShape();
+    cShape.setRadius(bodyDiameter / 2);
+    fDef = new FixtureDef();
+    fDef.shape = cShape;
+    fDef.isSensor = true;
+    fDef.filter.categoryBits = BitCollision.BOMB;
+    fDef.filter.maskBits = BitCollision.orOperation(BitCollision.BOMBERMAN, BitCollision.WALL,
+        BitCollision.BRICK, BitCollision.BOMB, BitCollision.FLAME);
 
-		body.createFixture(fDef).setUserData(this);
-	}
+    body.createFixture(fDef).setUserData(this);
+  }
 
-	private void willExplode(float delta) {
-		countDown -= delta;
-		if (countDown <= 0 && !canDestroy) {
-			this.body.setLinearVelocity(new Vector2(0, 0));
-			bDef.position.set(UnitHelper.coordScreenToBox2D((int)(body.getPosition().x), (int)(body.getPosition().y), 0));
-			explode();
-		}
-	}
+  private void willExplode(float delta) {
+    countDown -= delta;
+    if (countDown <= 0 && !canDestroy) {
+      if ((0.43 < body.getPosition().x - (int) body.getPosition().x
+          && body.getPosition().x - (int) body.getPosition().x < 0.54)
+          && (0.43 < body.getPosition().y - (int) body.getPosition().y
+              && body.getPosition().y - (int) body.getPosition().y < 0.54)) {
+        this.body.setLinearVelocity(new Vector2(0, 0));
+        explode();
+      }
+    }
 
-	private void explode() {
-		animationHandle.setCurrentAnimation(State.BOMB_EXPLODE.getValue());
-		for (Flame.State direction : Flame.State.values()) {
-			Vector2 position, nextPosition;
-			for (int i = 0; i <= flameLength; i++) {
+  }
 
-				position = UnitHelper
-					.coordBox2DSnapToGrid(body.getPosition().add(Flame.State.getOffSet(direction).scl(i)));
+  private void explode() {
+    if (bombOwner.body.getPosition().x - body.getPosition().x < 0.2
+        || bombOwner.body.getPosition().y - body.getPosition().y < 0.2) {
+      bombOwner.canDestroy = true;
+    }
+    animationHandle.setCurrentAnimation(State.BOMB_EXPLODE.getValue());
+    for (Flame.State direction : Flame.State.values()) {
+      Vector2 position, nextPosition;
+      for (int i = 0; i <= flameLength; i++) {
 
-				Vector2 temp = body.getPosition().add(Flame.State.getOffSet(direction).scl(i + 1));
+        position = UnitHelper
+            .coordBox2DSnapToGrid(body.getPosition().add(Flame.State.getOffSet(direction).scl(i)));
 
-				nextPosition = UnitHelper.coordMetersToPixels(temp.x, temp.y);
+        Vector2 temp = body.getPosition().add(Flame.State.getOffSet(direction).scl(i + 1));
 
-				if (i != 0) {
-				// System.out.printf("(%.2f %.2f)\n",position.x, position.y);
-				// number++;
-				Flame flame = new Flame(this, position, direction);
-					this.flames.add(flame);
-				}
+        nextPosition = UnitHelper.coordMetersToPixels(temp.x, temp.y);
 
-				if (entityManager.wallContainsPosition(nextPosition))
-					break;
-			}
-		}
-		canDestroy = true;
-	}
+        if (i != 0) {
+          // System.out.printf("(%.2f %.2f)\n",position.x, position.y);
+          // number++;
+          Flame flame = new Flame(this, position, direction);
+          this.flames.add(flame);
+        }
 
-	public void update(float delta) {
-		if (countDown <= 0) {
-			timeRemove -= delta;
-		}
-		willExplode(delta);
-		if (!sensorFlag) {
-			if (this.body != null) {
-				this.body.getFixtureList().get(0).setSensor(false);
-			}
-		}
-		sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
-			UnitHelper.box2DToScreen(this.body.getPosition().y, this.bodyDiameter),
-			UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
-			UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
-		sprite.setRegion(animationHandle.getCurrentFrame());
-		for (Flame flame : flames) {
-			flame.update(delta);
-		}
-	}
+        if (entityManager.wallContainsPosition(nextPosition))
+          break;
+      }
+    }
+    canDestroy = true;
+  }
 
-	public void render(SpriteBatch batch) {
-		sprite.draw(batch);
-		for (Flame flame : flames) {
-			flame.render(batch);
-		}
-	}
+  public void update(float delta) {
+    if (countDown <= 0) {
+      timeRemove -= delta;
+    }
+    willExplode(delta);
+    if (!sensorFlag) {
+      if (this.body != null) {
+        this.body.getFixtureList().get(0).setSensor(false);
+      }
+    }
+    sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
+        UnitHelper.box2DToScreen(this.body.getPosition().y, this.bodyDiameter),
+        UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
+        UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
+    sprite.setRegion(animationHandle.getCurrentFrame());
+    for (Flame flame : flames) {
+      flame.update(delta);
+    }
+  }
 
-	private enum State {
-		BOMB_IDLE("bomb_idle"), 
-		BOMB_EXPLODE("bomb_explode");
-		
-		String stateName;
+  public void render(SpriteBatch batch) {
+    sprite.draw(batch);
+    for (Flame flame : flames) {
+      flame.render(batch);
+    }
+  }
 
-		private State(String stateName) {
-			this.stateName = stateName;
-		}
+  private enum State {
+    BOMB_IDLE("bomb_idle"), BOMB_EXPLODE("bomb_explode");
 
-		public String getValue() {
-			return stateName;
-		}
-	}
+    String stateName;
 
-	@Override
-	public void reset() {
-		this.sensorFlag = true;
-		this.countDown = 3;
-		world.destroyBody(body);
-		animationHandle.setCurrentAnimation(null);
-		sprite = new Sprite();
-		removeFromEntityManager();
-		bombOwner.recoverBomb();
-		bombOwner = null;
-		world = null;
-		flameLength = 0;
-		flames.clear();
-	}
+    private State(String stateName) {
+      this.stateName = stateName;
+    }
 
-	@Override
-	public void dispose() {
-		this.sprite.getTexture().dispose();
-		for (Flame flame : flames) {
-			flame.dispose();
-		}
-	}
+    public String getValue() {
+      return stateName;
+    }
+  }
 
-	public EntityManager getEntityManager() {
-		return this.entityManager;
-	}
+  @Override
+  public void reset() {
+    this.sensorFlag = true;
+    this.countDown = 3;
+    world.destroyBody(body);
+    animationHandle.setCurrentAnimation(null);
+    sprite = new Sprite();
+    removeFromEntityManager();
+    bombOwner.recoverBomb();
+    bombOwner = null;
+    world = null;
+    flameLength = 0;
+    flames.clear();
+  }
 
-	public ArrayList<Flame> getFlames() {
-		return this.flames;
-	}
+  @Override
+  public void dispose() {
+    this.sprite.getTexture().dispose();
+    for (Flame flame : flames) {
+      flame.dispose();
+    }
+  }
+
+  public EntityManager getEntityManager() {
+    return this.entityManager;
+  }
+
+  public ArrayList<Flame> getFlames() {
+    return this.flames;
+  }
 }
