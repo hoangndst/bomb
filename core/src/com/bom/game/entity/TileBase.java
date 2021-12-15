@@ -18,6 +18,7 @@ public abstract class TileBase {
     protected Fixture fixture;
     protected Rectangle bounds;
     public static TiledMapTileSet tileSet;
+    protected float timeRemove = 1;
 
     public TileBase(GameScreen screen, Rectangle bounds) {
         this.bounds = bounds;
@@ -41,7 +42,7 @@ public abstract class TileBase {
         );
         fdef.shape = shape;
         fixture = body.createFixture(fdef);
-
+        fixture.setUserData(this);
         tileSet = screen.getMap().getTileSets().getTileSet(Paths.tileset_All);
     }
     
