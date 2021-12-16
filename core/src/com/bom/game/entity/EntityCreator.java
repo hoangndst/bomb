@@ -42,6 +42,8 @@ public class EntityCreator {
         createItemSpeedUP();
         createItemFlameUp();
         createItemBombUP();
+        createKey();
+        createPortal();
         // createStaticObjectsFromLayer(StringPaths.tiledMagnetsLayer, CollisionBits.MAGNET,
         //         CollisionBits.orOperation(
         //                 CollisionBits.PLAYER,
@@ -123,6 +125,22 @@ public class EntityCreator {
             Ellipse ellipse = ((EllipseMapObject) object).getEllipse();
             System.err.println(ellipse.x + " " + ellipse.y + " " + ellipse.width + " " + ellipse.height);
             entityManager.addEnemy(new Balloom(gameScreen, ellipse));
+        }
+    }
+
+    private void createKey() {
+        for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledKey)
+                .getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            entityManager.addItem(new Key(gameScreen, rect));
+        }
+    }
+
+    private void createPortal() {
+        for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledPortal)
+                .getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            entityManager.addItem(new Portal(gameScreen, rect));
         }
     }
 }

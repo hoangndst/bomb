@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="104">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="110">
  <tileset firstgid="1" source="tileset_all.tsx"/>
  <tileset firstgid="2882" name="item" tilewidth="15" tileheight="15" spacing="1" margin="1" tilecount="315" columns="15">
   <image source="item.png" width="250" height="348"/>
@@ -25,7 +25,7 @@
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,2884,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2884,0,0,0,0,0,0,0,0,0,476,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,2884,0,0,0,0,0,2882,0,0,0,0,0,0,0,
@@ -100,6 +100,12 @@
   <object id="98" x="64.5455" y="32.4545" width="14.9091" height="14.9091"/>
   <object id="99" x="48.6364" y="80.9091" width="14.3636" height="14.5455"/>
  </objectgroup>
+ <objectgroup id="13" name="key">
+  <object id="106" x="224.813" y="32.5" width="14.25" height="14.3125"/>
+ </objectgroup>
+ <objectgroup id="14" name="portal">
+  <object id="109" x="192" y="48" width="16" height="16"/>
+ </objectgroup>
  <objectgroup id="6" name="brick">
   <object id="62" x="32" y="32" width="16" height="16"/>
   <object id="63" x="64" y="32" width="16" height="16"/>
@@ -128,6 +134,7 @@
   <object id="86" x="224" y="176" width="16" height="16"/>
   <object id="87" x="224.455" y="48" width="15.5455" height="16"/>
   <object id="88" x="224" y="64" width="16" height="16"/>
+  <object id="104" x="224.125" y="32" width="15.875" height="16"/>
  </objectgroup>
  <objectgroup id="8" name="balloom">
   <object id="89" x="195.545" y="143.818" width="13.5455" height="13.3636">

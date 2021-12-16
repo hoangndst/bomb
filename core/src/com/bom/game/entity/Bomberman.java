@@ -40,7 +40,7 @@ public class Bomberman extends EntityBase implements Disposable {
     private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
     private boolean canPlaceBombs = true;
     private BombPool bombPool;
-    public float time = 2f;
+    public float time = 1.5f;
     private Vector2 initPosition;
 
     public Bomberman(GameScreen gameScreen, Vector2 position) {
@@ -112,8 +112,8 @@ public class Bomberman extends EntityBase implements Disposable {
     private void checkExplode(float deltaTime) {
         if (!canPlaceBombs) {
             bombCooldownTimer -= deltaTime;
-        if (bombCooldownTimer < 0)
-            canPlaceBombs = true;
+            if (bombCooldownTimer < 0 && !canDestroy) 
+                canPlaceBombs = true;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && canPlaceBombs) {
             if (this.bombCount > 0 && canPlaceBombs) {
@@ -174,7 +174,9 @@ public class Bomberman extends EntityBase implements Disposable {
     }
 
     public void dead() {
+        canPlaceBombs = false;
         if (time <= 0) {
+            GameManager.bombermanLive--;
             bombCount = 1;
             flameLength = 1;
             speed = 2.5f;
@@ -182,7 +184,7 @@ public class Bomberman extends EntityBase implements Disposable {
             definePlayer(initPosition);
             this.direction = State.IDLE_DOWN;
             canDestroy = false;
-            time = 2f;
+            time = 1.5f;
         }
     }
 

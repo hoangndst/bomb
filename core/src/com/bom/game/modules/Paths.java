@@ -17,5 +17,7 @@ public class Paths {
     public static final String tiledSpeedUPLayer = "item_speed_up";
     public static final String tiledFlameUpLayer = "item_flame_up";
     public static final String tiledBombUPLayer = "item_bomb_up";
+    public static final String tiledKey = "key";
+    public static final String tiledPortal = "portal";
     
 }

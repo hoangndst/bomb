@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bom.game.screen.GameScreen;
+import com.bom.game.screen.MenuScreen;
 
 public class BomGame extends Game {
     public SpriteBatch batch;
@@ -27,8 +28,7 @@ public class BomGame extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        gameScreen = new GameScreen(this);
-        setScreen(gameScreen);
+        this.setScreen(new MenuScreen(this));
     }
 
     @Override
@@ -40,5 +40,9 @@ public class BomGame extends Game {
     public void dispose() {
         super.dispose();
         batch.dispose();
+    }
+
+    public SpriteBatch getSpriteBatch() {
+        return batch;
     }
 }
