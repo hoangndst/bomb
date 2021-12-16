@@ -10,7 +10,7 @@ public class EntityManager {
     private ArrayList<Wall> walls;
     private ArrayList<Brick> bricks;
     private ArrayList<EntityBase> entities;
-    private ArrayList<EntityBase> enemies;
+    private ArrayList<EnemyBase> enemies;
     private ArrayList<TileBase> items;
 
     public EntityManager() {
@@ -33,8 +33,8 @@ public class EntityManager {
         this.entities.add(entityBase);
     }
 
-    public void addEnemy(EntityBase entityBase) {
-        this.enemies.add(entityBase);
+    public void addEnemy(EnemyBase enemyBase) {
+        this.enemies.add(enemyBase);
     }
 
     public boolean wallContainsPosition(Vector2 position) {
@@ -54,17 +54,17 @@ public class EntityManager {
         // for (TileBase item : items) {
         //     System.err.println(item);
         // }
-        EntityBase temp = null;
-        for (EntityBase entityBase : enemies) {
-            if (entityBase instanceof Balloom) {
-                Balloom balloom = (Balloom) entityBase;
-                if (balloom.canDestroy && !balloom.isDead && balloom.timeRemove <= 0) {
-                    balloom.dead();
-                    temp = balloom;
-                } else {
-                    balloom.update(delta);
-                }
+        // System.err.println(enemies.size());
+        EnemyBase temp = null;
+        for (EnemyBase enemy : enemies) {
+            // System.err.println(enemy.canDestroy + " " + enemy.isDead + " " + enemy.timeRemove);
+            if (enemy.canDestroy && !enemy.isDead && enemy.timeRemove <= 0) {
+                enemy.dead();
+                temp = enemy;
+            } else {
+                enemy.update(delta);
             }
+            
         }
         if (temp != null) {
             this.enemies.remove(temp);
@@ -72,9 +72,9 @@ public class EntityManager {
     }
 
     public void render(SpriteBatch batch) {
-        for (EntityBase entityBase : enemies) {
-            if (entityBase instanceof Balloom && !entityBase.isDead) {
-                entityBase.render(batch);
+        for (EnemyBase enemy : enemies) {
+            if (!enemy.isDead) {
+                enemy.render(batch);
             } 
         }
     }

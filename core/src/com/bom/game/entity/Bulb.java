@@ -16,10 +16,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bom.game.animation.AnimationHandle;
 import com.bom.game.modules.BitCollision;
+import com.bom.game.modules.Hud;
 import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
 
-public class Bulb extends EntityBase {
+public class Bulb extends EnemyBase {
     
     private World world;
     private AnimationHandle animationHandle;
@@ -32,12 +33,14 @@ public class Bulb extends EntityBase {
     private String playerPath = "bulb.atlas";
     private Sprite sprite;
     private GameScreen gameScreen;
-    public float timeMove = 0f;
-    public float timeRemove = 1f;
+    
 
     public Bulb(GameScreen gameScreen, Ellipse ellipse) {
         super(gameScreen.entityCreator.entityManager);
-        canDestroy = false;
+        this.timeMove = 0f;
+        this.timeRemove = 1f;
+        this.enemyLive = 2;
+        this.canDestroy = false;
         this.world = gameScreen.getWorld();
         this.type = EntityType.BOMBERMAN;
         this.gameScreen = gameScreen;
@@ -96,11 +99,15 @@ public class Bulb extends EntityBase {
     public void dead() {
         if (timeRemove <= 0) {
             this.world.destroyBody(this.body);
+            Hud.addScore(1500);
             isDead = true;
         }
     }
 
     public void update(float delta) {
+        if (enemyLive <= 0) {
+            canDestroy = true;
+        }
         if (canDestroy) {
             this.body.setLinearVelocity(new Vector2(0, 0));
             animationHandle.setCurrentAnimation(State.BULB_DEAD.getValue());

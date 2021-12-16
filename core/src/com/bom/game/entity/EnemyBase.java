@@ -2,7 +2,13 @@ package com.bom.game.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class EnemyBase extends EntityBase {
+public abstract class EnemyBase extends EntityBase {
+
+    public float timeMove;
+    public float timeRemove;
+    public int enemyLive;
+
+    public EnemyBase() {}
 
     public EnemyBase(EntityManager entityManager) {
         super(entityManager);
@@ -17,8 +23,7 @@ public class EnemyBase extends EntityBase {
     @Override
     public void render(SpriteBatch batch) {
         // TODO Auto-generated method stub
-        
     }
-
     
+    public abstract void dead();
 }

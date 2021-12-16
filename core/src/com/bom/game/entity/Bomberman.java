@@ -145,6 +145,7 @@ public class Bomberman extends EntityBase implements Disposable {
 
     public void update(float deltaTime) {
         // System.err.println(bombCount);
+        GameManager.timeGhostMode -= deltaTime;
         handleInput(deltaTime);
         checkExplode(deltaTime);
         sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
@@ -185,10 +186,12 @@ public class Bomberman extends EntityBase implements Disposable {
             this.direction = State.IDLE_DOWN;
             canDestroy = false;
             time = 1.5f;
+            GameManager.timeGhostMode = 10f;
         }
     }
 
     public void definePlayer(Vector2 position) {
+        
         bDef.type = BodyDef.BodyType.DynamicBody;
         bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y, 0.875f / 2));
 

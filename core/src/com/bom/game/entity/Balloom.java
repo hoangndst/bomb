@@ -1,7 +1,6 @@
 package com.bom.game.entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,10 +16,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bom.game.animation.AnimationHandle;
 import com.bom.game.modules.BitCollision;
+import com.bom.game.modules.Hud;
 import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
 
-public class Balloom extends EntityBase {
+public class Balloom extends EnemyBase {
     
     private World world;
     private AnimationHandle animationHandle;
@@ -33,12 +33,13 @@ public class Balloom extends EntityBase {
     private String playerPath = "balloom.atlas";
     private Sprite sprite;
     private GameScreen gameScreen;
-    public float timeMove = 0f;
-    public float timeRemove = 1f;
 
     public Balloom(GameScreen gameScreen, Ellipse ellipse) {
         super(gameScreen.entityCreator.entityManager);
-        canDestroy = false;
+        this.timeMove = 0f;
+        this.timeRemove = 1f;
+        this.enemyLive = 1;
+        this.canDestroy = false;
         this.world = gameScreen.getWorld();
         this.type = EntityType.BOMBERMAN;
         this.gameScreen = gameScreen;
@@ -103,12 +104,16 @@ public class Balloom extends EntityBase {
 
     public void dead() {
         if (timeRemove <= 0) {
+            Hud.addScore(1000);
             this.world.destroyBody(this.body);
             isDead = true;
         }
     }
 
     public void update(float delta) {
+        if (enemyLive <= 0) {
+            canDestroy = true;
+        }
         if (canDestroy) {
             this.body.setLinearVelocity(new Vector2(0, 0));
             animationHandle.setCurrentAnimation(State.BALLOOM_DEAD.getValue());
