@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.bom.game.animation.AnimationHandle;
+import com.bom.game.manager.GameManager;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
@@ -39,7 +40,7 @@ public class Bomberman extends EntityBase implements Disposable {
     private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
     private boolean canPlaceBombs = true;
     private BombPool bombPool;
-    public float time = 0.8f;
+    public float time = 2f;
     private Vector2 initPosition;
 
     public Bomberman(GameScreen gameScreen, Vector2 position) {
@@ -69,7 +70,7 @@ public class Bomberman extends EntityBase implements Disposable {
         animationHandle.addAnimation(State.IDLE_UP.getValue(),
             new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.IDLE_UP.getValue())));
         animationHandle.addAnimation(State.DEAD.getValue(),
-            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.DEAD.getValue())));
+            new Animation<TextureRegion>(FRAME_TIME + 1, atlas.findRegions(State.DEAD.getValue())));
         animationHandle.setCurrentAnimation(State.IDLE_DOWN.getValue());
         sprite = new Sprite(animationHandle.getCurrentFrame());
         sprite.setPosition(position.x, position.y);
@@ -116,6 +117,7 @@ public class Bomberman extends EntityBase implements Disposable {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && canPlaceBombs) {
             if (this.bombCount > 0 && canPlaceBombs) {
+                GameManager.getInstance().playSound("PlaceBomb.ogg");
                 Bomb bomb = bombPool.get().obtain();
                 bomb = new Bomb();
                 bomb.init(this, UnitHelper.coordBox2DSnapToGrid(body.getPosition()), flameLength);
@@ -142,7 +144,7 @@ public class Bomberman extends EntityBase implements Disposable {
     }
 
     public void update(float deltaTime) {
-        System.err.println(bombCount);
+        // System.err.println(bombCount);
         handleInput(deltaTime);
         checkExplode(deltaTime);
         sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
@@ -180,7 +182,7 @@ public class Bomberman extends EntityBase implements Disposable {
             definePlayer(initPosition);
             this.direction = State.IDLE_DOWN;
             canDestroy = false;
-            time = 0.8f;
+            time = 2f;
         }
     }
 
