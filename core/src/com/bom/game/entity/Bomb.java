@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Pool.Poolable;
 import com.bom.game.animation.AnimationHandle;
+import com.bom.game.manager.GameManager;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.modules.UnitHelper;
 
@@ -95,6 +96,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 	}
 
 	private void explode() {
+		GameManager.getInstance().playSound("Explosion.ogg");
 		animationHandle.setCurrentAnimation(State.BOMB_EXPLODE.getValue());
 		Flame flameMid = new Flame(this,UnitHelper.coordBox2DSnapToGrid(body.getPosition()), Flame.State.FLAME_UP);
 		for (Flame.State direction : Flame.State.values()) {
