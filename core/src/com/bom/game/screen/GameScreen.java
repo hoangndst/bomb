@@ -78,12 +78,11 @@ public class GameScreen implements Screen {
         System.err.println(GameManager.bombermanLive);
         if (GameManager.bombermanLive <= 0) {
             bomGame.setScreen(new GameOverScreen(bomGame));
+            GameManager.reset();
         }
-        System.err.println("haskey: " +  GameManager.bombermanHasKey);
-        System.err.println("inPortal: " + GameManager.bombermanInPortal);
-        System.err.println("clear: " + entityCreator.entityManager.enemiesIsClear());
         if (GameManager.bombermanHasKey && GameManager.bombermanInPortal && entityCreator.entityManager.enemiesIsClear()) {
             bomGame.setScreen(new VictoryScreen(bomGame));
+            GameManager.reset();
         }
     }
 

@@ -1,7 +1,6 @@
 package com.bom.game.entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,7 +19,7 @@ import com.bom.game.modules.BitCollision;
 import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
 
-public class Balloom extends EntityBase {
+public class Bulb extends EntityBase {
     
     private World world;
     private AnimationHandle animationHandle;
@@ -30,13 +29,13 @@ public class Balloom extends EntityBase {
     private static BodyDef bDef = new BodyDef();
     private static FixtureDef fDef = new FixtureDef();
     private static Circle circle = new Circle();
-    private String playerPath = "balloom.atlas";
+    private String playerPath = "bulb.atlas";
     private Sprite sprite;
     private GameScreen gameScreen;
     public float timeMove = 0f;
     public float timeRemove = 1f;
 
-    public Balloom(GameScreen gameScreen, Ellipse ellipse) {
+    public Bulb(GameScreen gameScreen, Ellipse ellipse) {
         super(gameScreen.entityCreator.entityManager);
         canDestroy = false;
         this.world = gameScreen.getWorld();
@@ -44,12 +43,9 @@ public class Balloom extends EntityBase {
         this.gameScreen = gameScreen;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();
-        animationHandle.addAnimation(State.BALLOOM_UP.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_UP.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_DEAD.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_DOWN.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_DOWN.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_RIGHT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_RIGHT.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_LEFT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_LEFT.getValue())));
-        animationHandle.setCurrentAnimation(State.BALLOOM_DOWN.getValue());
+        animationHandle.addAnimation(State.BULB_DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BULB_DEAD.getValue())));
+        animationHandle.addAnimation(State.BULB_IDLE.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BULB_IDLE.getValue())));
+        animationHandle.setCurrentAnimation(State.BULB_IDLE.getValue());
         sprite = new Sprite(animationHandle.getCurrentFrame());
         sprite.setPosition(ellipse.x, ellipse.y);
         defineBalloom(ellipse);
@@ -80,19 +76,15 @@ public class Balloom extends EntityBase {
             int random = getRandomNumber(1, 5);
             switch (random) {
                 case 1:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_RIGHT.getValue());
                     body.setLinearVelocity(new Vector2(speed, 0));
                     break;
                 case 2:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_LEFT.getValue());
                     body.setLinearVelocity(new Vector2(-speed, 0));
                     break;
                 case 3:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_UP.getValue());
                     body.setLinearVelocity(new Vector2(0, speed));
                     break;
                 case 4:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_DOWN.getValue());
                     body.setLinearVelocity(new Vector2(0, -speed));
                     break;
             }
@@ -111,7 +103,7 @@ public class Balloom extends EntityBase {
     public void update(float delta) {
         if (canDestroy) {
             this.body.setLinearVelocity(new Vector2(0, 0));
-            animationHandle.setCurrentAnimation(State.BALLOOM_DEAD.getValue());
+            animationHandle.setCurrentAnimation(State.BULB_DEAD.getValue());
             timeRemove -= delta;
         } else  {
             randomMove(delta);
@@ -131,11 +123,8 @@ public class Balloom extends EntityBase {
 
     private enum State {
 
-        BALLOOM_DOWN("balloom_down"),
-        BALLOOM_UP("balloom_up"),
-        BALLOOM_LEFT("balloom_left"),
-        BALLOOM_RIGHT("balloom_right"),
-        BALLOOM_DEAD("balloom_dead");
+        BULB_IDLE("bulb_idle"),
+        BULB_DEAD("bulb_dead");
 
         private String value;
 

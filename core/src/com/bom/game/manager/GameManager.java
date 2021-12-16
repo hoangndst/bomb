@@ -19,6 +19,12 @@ public class GameManager implements Disposable {
     public static boolean bombermanHasKey = false;
     public static boolean bombermanInPortal = false;
 
+    public static void reset() {
+        bombermanLive = 3;
+        bombermanHasKey = false;
+        bombermanInPortal = false;
+    }
+
     private String currentMusic = "";
 
     private GameManager() {

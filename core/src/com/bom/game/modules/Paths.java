@@ -11,6 +11,7 @@ public class Paths {
     public static final String tiledBackgroundLayer = "background";
     public static final String tiledWallsLayer = "wall";
     public static final String tiledBalloomLayer = "balloom";
+    public static final String tiledBulbLayer = "bulb";
     public static final String tiledChestsLayer = "brick";
     public static final String tiledMagnetsLayer = "magnets";
     public static final String tiledKeysLayer = "keys";

@@ -86,7 +86,7 @@ public class Bomberman extends EntityBase implements Disposable {
                 direction = State.IDLE_UP;
             // this.body.applyLinearImpulse(new Vector2(0, 0.05f), this.body.getWorldCenter(), true);
             } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
+                animationHandle.setCurrentAnimation(State.WALK_DOWN.getValue());
                 this.body.setLinearVelocity(new Vector2(0, -speed));
                 direction = State.IDLE_DOWN;
             // this.body.applyLinearImpulse(new Vector2(0, -0.05f), this.body.getWorldCenter(), true);
