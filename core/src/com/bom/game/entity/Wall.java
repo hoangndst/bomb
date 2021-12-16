@@ -12,11 +12,21 @@ public class Wall extends TileBase {
             BitCollision.orOperation(
             BitCollision.BOMBERMAN,
             BitCollision.BOMB,
-            BitCollision.FLAME
+            BitCollision.FLAME,
+            BitCollision.ENEMY
         ));
+        this.type = Type.WALL;
     }
+
 
     public Rectangle getBounds() {
         return bounds;
+    }
+
+
+    @Override
+    public void handleAction() {
+        // TODO Auto-generated method stub
+        
     }
 }

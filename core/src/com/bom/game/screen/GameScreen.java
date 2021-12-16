@@ -58,6 +58,7 @@ public class GameScreen implements Screen {
         world.step(1 / 60f, 6, 2);
         renderer.setView(camera);
         bomberman.update(delta);
+        entityCreator.entityManager.update(delta);
     }
 
     private void remove(float delta) {
@@ -80,7 +81,7 @@ public class GameScreen implements Screen {
         // if (bomberman.canDestroy) {
         //     bomberman.dead();
         // }
-        entities.clear();
+        // entities.clear();
     }
 
     public TiledMap getMap() {
@@ -108,6 +109,7 @@ public class GameScreen implements Screen {
         bomGame.batch.setProjectionMatrix(camera.combined);
         bomGame.batch.begin();
         bomberman.render(bomGame.batch);
+        entityCreator.entityManager.render(bomGame.batch);
         bomGame.batch.end();
     }
 

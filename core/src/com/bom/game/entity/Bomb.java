@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
@@ -29,13 +30,15 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 	public Body body;
 	private static BodyDef bDef = new BodyDef();
 	private static FixtureDef fDef = new FixtureDef();
+	private static CircleShape cShape = new CircleShape();
 	private String playerPath = "bomb.atlas";
 	private Sprite sprite;
-	private float countDown = 2f;
+	public float countDown = 2f;
 	private float bodyDiameter = 0.9f;
 	public boolean sensorFlag = true;
 	private Bomberman bombOwner;
 	public float timeRemove;
+	public boolean canMove = true;
   // private State direction = State.IDLE_DOWN;
 
   	public Bomb() {
@@ -68,14 +71,14 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 		bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y, bodyDiameter / 2));
 		bDef.fixedRotation = true;
 		body = world.createBody(bDef);
-		CircleShape cShape = new CircleShape();
+		cShape = new CircleShape();
 		cShape.setRadius(0.9f / 2);
 		fDef = new FixtureDef();
 		fDef.shape = cShape;
 		fDef.isSensor = true;
 		fDef.filter.categoryBits = BitCollision.BOMB;
 		fDef.filter.maskBits = BitCollision.orOperation(BitCollision.BOMBERMAN, BitCollision.WALL,
-			BitCollision.BRICK, BitCollision.BOMB, BitCollision.FLAME);
+			BitCollision.BRICK, BitCollision.FLAME, BitCollision.ENEMY, BitCollision.BOMB);
 
 		body.createFixture(fDef).setUserData(this);
 	}
@@ -93,6 +96,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 
 	private void explode() {
 		animationHandle.setCurrentAnimation(State.BOMB_EXPLODE.getValue());
+		Flame flameMid = new Flame(this,UnitHelper.coordBox2DSnapToGrid(body.getPosition()), Flame.State.FLAME_UP);
 		for (Flame.State direction : Flame.State.values()) {
 			Vector2 position, nextPosition;
 			for (int i = 0; i <= flameLength; i++) {
@@ -107,7 +111,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 				if (i != 0) {
 				// System.out.printf("(%.2f %.2f)\n",position.x, position.y);
 				// number++;
-				Flame flame = new Flame(this, position, direction);
+					Flame flame = new Flame(this, position, direction);
 					this.flames.add(flame);
 				}
 
@@ -115,6 +119,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 					break;
 			}
 		}
+		this.flames.add(flameMid);
 		canDestroy = true;
 	}
 
@@ -127,6 +132,9 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 			if (this.body != null) {
 				this.body.getFixtureList().get(0).setSensor(false);
 			}
+		}
+		if (!canMove) {
+			this.body.setType(BodyDef.BodyType.StaticBody);
 		}
 		if (countDown > 0) {
 			sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
@@ -143,8 +151,8 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 
 	public void render(SpriteBatch batch) {
 		sprite.draw(batch);
-		for (Flame flame : flames) {
-			flame.render(batch);
+		for (int i = 0; i < flames.size() - 1; i++) {
+			flames.get(i).render(batch);
 		}
 	}
 

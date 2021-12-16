@@ -1,10 +1,15 @@
 package com.bom.game.entity;
 
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.bom.game.modules.Paths;
@@ -33,6 +38,10 @@ public class EntityCreator {
 
         createWallObjects();
         createBrickObjects();
+        createBalloomObjects();
+        createItemSpeedUP();
+        createItemFlameUp();
+        createItemBombUP();
         // createStaticObjectsFromLayer(StringPaths.tiledMagnetsLayer, CollisionBits.MAGNET,
         //         CollisionBits.orOperation(
         //                 CollisionBits.PLAYER,
@@ -81,6 +90,39 @@ public class EntityCreator {
                 .getObjects().getByType(RectangleMapObject.class)) {
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             entityManager.addBrick(new Brick(gameScreen, rect));
+        }
+    }
+
+    private void createItemSpeedUP() {
+        for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledSpeedUPLayer)
+                .getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            entityManager.addItem(new ItemSpeedUp(gameScreen, rect));
+        }
+    }
+
+    private void createItemFlameUp() {
+        for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledFlameUpLayer)
+                .getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            entityManager.addItem(new ItemFlameUp(gameScreen, rect));
+        }
+    }
+
+    private void createItemBombUP() {
+        for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledBombUPLayer)
+                .getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            entityManager.addItem(new ItemBombUp(gameScreen, rect));
+        }
+    }
+
+    private void createBalloomObjects() {
+        for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledBalloomLayer)
+                .getObjects().getByType(EllipseMapObject.class)) {
+            Ellipse ellipse = ((EllipseMapObject) object).getEllipse();
+            System.err.println(ellipse.x + " " + ellipse.y + " " + ellipse.width + " " + ellipse.height);
+            entityManager.addEnemy(new Balloom(gameScreen, ellipse));
         }
     }
 }

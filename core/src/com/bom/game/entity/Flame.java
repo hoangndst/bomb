@@ -67,7 +67,7 @@ public class Flame extends EntityBase implements Disposable {
         fDef.isSensor = true;
         fDef.filter.categoryBits = BitCollision.FLAME;
         fDef.filter.maskBits = BitCollision.orOperation(BitCollision.BOMBERMAN, BitCollision.WALL,
-            BitCollision.BRICK, BitCollision.BOMB);
+            BitCollision.BRICK, BitCollision.BOMB, BitCollision.ENEMY);
 
         body.createFixture(fDef).setUserData(this);
     }
