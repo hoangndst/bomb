@@ -84,7 +84,10 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 		countDown -= delta;
 		if (countDown <= 0 && !canDestroy) {
 			this.body.setLinearVelocity(new Vector2(0, 0));
-			bDef.position.set(UnitHelper.coordScreenToBox2D((int)(body.getPosition().x), (int)(body.getPosition().y), 0));
+			System.err.println( body.getPosition().x + " " + body.getPosition().y);
+			// bDef.position.set(UnitHelper.coordScreenToBox2D((int) body.getPosition().x, (int) body.getPosition().y, bodyDiameter / 2));
+			sprite.setPosition(UnitHelper.box2DToScreen((int) this.body.getPosition().x, this.bodyDiameter),
+			UnitHelper.box2DToScreen((int) this.body.getPosition().y, this.bodyDiameter));
 			explode();
 		}
 	}
