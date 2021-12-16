@@ -9,6 +9,7 @@ import com.bom.game.entity.Balloom;
 import com.bom.game.entity.Bomb;
 import com.bom.game.entity.Bomberman;
 import com.bom.game.entity.Brick;
+import com.bom.game.entity.EnemyBase;
 import com.bom.game.entity.EntityBase;
 import com.bom.game.entity.TileBase;
 import com.bom.game.entity.TileBase.Type;
@@ -28,12 +29,16 @@ public class WorldContactListener implements ContactListener {
             GameManager.getInstance().playSound("Die.ogg");
             EntityBase entity = (EntityBase) fixA.getUserData();
             Bomberman bomberman = (Bomberman) entity;
-            bomberman.canDestroy = true;
+            if (GameManager.timeGhostMode <= 0) {
+                bomberman.canDestroy = true;
+            }
         } else if (fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
             GameManager.getInstance().playSound("Die.ogg");
             EntityBase entity = (EntityBase) fixB.getUserData();
             Bomberman bomberman = (Bomberman) entity;
-            bomberman.canDestroy = true;
+            if (GameManager.timeGhostMode <= 0) {
+                bomberman.canDestroy = true;
+            }
         } else if (fixB.getFilterData().categoryBits == BitCollision.BRICK) {
             // TileBase tile = (TileBase) fixB.getUserData();
             Brick brick = (Brick) fixB.getUserData();
@@ -51,38 +56,39 @@ public class WorldContactListener implements ContactListener {
             bomb.countDown = 0;
         } else if (fixA.getFilterData().categoryBits == BitCollision.ENEMY) {
             GameManager.getInstance().playSound("EnemyDie.ogg");
-            Balloom entity = (Balloom) fixA.getUserData();
-            entity.canDestroy = true;
+            EnemyBase enemy = (EnemyBase) fixA.getUserData();
+            enemy.enemyLive -= 1;
         } else if (fixB.getFilterData().categoryBits == BitCollision.ENEMY) {
             GameManager.getInstance().playSound("EnemyDie.ogg");
-            Balloom entity = (Balloom) fixB.getUserData();
-            entity.canDestroy = true;
+            EnemyBase enemy = (EnemyBase) fixB.getUserData();
+            enemy.enemyLive -= 1;
         }
         }
-        if (fixA.getFilterData().categoryBits == BitCollision.ENEMY
-            || fixB.getFilterData().categoryBits == BitCollision.ENEMY) {
-        if (fixA.getFilterData().categoryBits == BitCollision.BOMB) {
-            Bomb bomb = (Bomb) fixA.getUserData();
-            bomb.canMove = false;
-        } else if (fixB.getFilterData().categoryBits == BitCollision.BOMB) {
-            Bomb bomb = (Bomb) fixB.getUserData();
-            bomb.canMove = false;
-        } else if (fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
-            GameManager.getInstance().playSound("Die.ogg");
-            EntityBase entity = (EntityBase) fixA.getUserData();
-            Bomberman bomberman = (Bomberman) entity;
-            bomberman.canDestroy = true;
-        } else if (fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
-            GameManager.getInstance().playSound("Die.ogg");
-            EntityBase entity = (EntityBase) fixB.getUserData();
-            Bomberman bomberman = (Bomberman) entity;
-            bomberman.canDestroy = true;
+        if (fixA.getFilterData().categoryBits == BitCollision.ENEMY || fixB.getFilterData().categoryBits == BitCollision.ENEMY) {
+            if (fixA.getFilterData().categoryBits == BitCollision.BOMB) {
+                Bomb bomb = (Bomb) fixA.getUserData();
+                bomb.canMove = false;
+            } else if (fixB.getFilterData().categoryBits == BitCollision.BOMB) {
+                Bomb bomb = (Bomb) fixB.getUserData();
+                bomb.canMove = false;
+            } else if (fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
+                GameManager.getInstance().playSound("Die.ogg");
+                EntityBase entity = (EntityBase) fixA.getUserData();
+                Bomberman bomberman = (Bomberman) entity;
+                if (GameManager.timeGhostMode <= 0) {
+                    bomberman.canDestroy = true;
+                }
+            } else if (fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
+                GameManager.getInstance().playSound("Die.ogg");
+                EntityBase entity = (EntityBase) fixB.getUserData();
+                Bomberman bomberman = (Bomberman) entity;
+                if (GameManager.timeGhostMode <= 0) {
+                    bomberman.canDestroy = true;
+                }
+            }
         }
-        }
-        if (fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN
-            || fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
-            if (fixA.getFilterData().categoryBits == BitCollision.ITEM
-                || fixB.getFilterData().categoryBits == BitCollision.ITEM) {
+        if (fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN || fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
+            if (fixA.getFilterData().categoryBits == BitCollision.ITEM || fixB.getFilterData().categoryBits == BitCollision.ITEM) {
                     Fixture itemFixture = fixA.getFilterData().categoryBits == BitCollision.ITEM ? fixA : fixB;
                     Fixture bombermanFixture =
                     fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN ? fixA : fixB;
@@ -110,8 +116,7 @@ public class WorldContactListener implements ContactListener {
                     default:
                         break;
                     }
-            } else if (fixA.getFilterData().categoryBits == BitCollision.BOMB
-            || fixB.getFilterData().categoryBits == BitCollision.BOMB) {
+            } else if (fixA.getFilterData().categoryBits == BitCollision.BOMB || fixB.getFilterData().categoryBits == BitCollision.BOMB) {
                 Fixture bombFixture = fixA.getFilterData().categoryBits == BitCollision.BOMB ? fixA : fixB;
                 Bomb bomb = (Bomb) bombFixture.getUserData();
                 if (bomb.canKick) {

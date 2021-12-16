@@ -20,7 +20,7 @@ import com.bom.game.modules.Hud;
 import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
 
-public class Balloom extends EnemyBase {
+public class Bulb extends EnemyBase {
     
     private World world;
     private AnimationHandle animationHandle;
@@ -30,27 +30,25 @@ public class Balloom extends EnemyBase {
     private static BodyDef bDef = new BodyDef();
     private static FixtureDef fDef = new FixtureDef();
     private static Circle circle = new Circle();
-    private String playerPath = "balloom.atlas";
+    private String playerPath = "bulb.atlas";
     private Sprite sprite;
     private GameScreen gameScreen;
+    
 
-    public Balloom(GameScreen gameScreen, Ellipse ellipse) {
+    public Bulb(GameScreen gameScreen, Ellipse ellipse) {
         super(gameScreen.entityCreator.entityManager);
         this.timeMove = 0f;
         this.timeRemove = 1f;
-        this.enemyLive = 1;
+        this.enemyLive = 2;
         this.canDestroy = false;
         this.world = gameScreen.getWorld();
         this.type = EntityType.BOMBERMAN;
         this.gameScreen = gameScreen;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();
-        animationHandle.addAnimation(State.BALLOOM_UP.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_UP.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_DEAD.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_DOWN.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_DOWN.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_RIGHT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_RIGHT.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_LEFT.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_LEFT.getValue())));
-        animationHandle.setCurrentAnimation(State.BALLOOM_DOWN.getValue());
+        animationHandle.addAnimation(State.BULB_DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BULB_DEAD.getValue())));
+        animationHandle.addAnimation(State.BULB_IDLE.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BULB_IDLE.getValue())));
+        animationHandle.setCurrentAnimation(State.BULB_IDLE.getValue());
         sprite = new Sprite(animationHandle.getCurrentFrame());
         sprite.setPosition(ellipse.x, ellipse.y);
         defineBalloom(ellipse);
@@ -81,19 +79,15 @@ public class Balloom extends EnemyBase {
             int random = getRandomNumber(1, 5);
             switch (random) {
                 case 1:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_RIGHT.getValue());
                     body.setLinearVelocity(new Vector2(speed, 0));
                     break;
                 case 2:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_LEFT.getValue());
                     body.setLinearVelocity(new Vector2(-speed, 0));
                     break;
                 case 3:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_UP.getValue());
                     body.setLinearVelocity(new Vector2(0, speed));
                     break;
                 case 4:
-                    animationHandle.setCurrentAnimation(State.BALLOOM_DOWN.getValue());
                     body.setLinearVelocity(new Vector2(0, -speed));
                     break;
             }
@@ -104,8 +98,8 @@ public class Balloom extends EnemyBase {
 
     public void dead() {
         if (timeRemove <= 0) {
-            Hud.addScore(1000);
             this.world.destroyBody(this.body);
+            Hud.addScore(1500);
             isDead = true;
         }
     }
@@ -116,7 +110,7 @@ public class Balloom extends EnemyBase {
         }
         if (canDestroy) {
             this.body.setLinearVelocity(new Vector2(0, 0));
-            animationHandle.setCurrentAnimation(State.BALLOOM_DEAD.getValue());
+            animationHandle.setCurrentAnimation(State.BULB_DEAD.getValue());
             timeRemove -= delta;
         } else  {
             randomMove(delta);
@@ -136,11 +130,8 @@ public class Balloom extends EnemyBase {
 
     private enum State {
 
-        BALLOOM_DOWN("balloom_down"),
-        BALLOOM_UP("balloom_up"),
-        BALLOOM_LEFT("balloom_left"),
-        BALLOOM_RIGHT("balloom_right"),
-        BALLOOM_DEAD("balloom_dead");
+        BULB_IDLE("bulb_idle"),
+        BULB_DEAD("bulb_dead");
 
         private String value;
 

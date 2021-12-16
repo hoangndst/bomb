@@ -37,7 +37,7 @@ public class Hud implements Disposable {
     font = new BitmapFont(Gdx.files.internal("fonts/foo.fnt"));
     Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
     // define our tracking variables
-    worldTimer = 10;
+    worldTimer = 180;
     timeCount = 0;
     score = 0;
 
