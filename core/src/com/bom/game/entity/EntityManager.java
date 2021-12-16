@@ -83,4 +83,8 @@ public class EntityManager {
         this.items.add(item);
     }
 
+    public boolean enemiesIsClear() {
+        return enemies.size() == 0;
+    }
+
 }

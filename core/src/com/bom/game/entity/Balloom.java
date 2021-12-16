@@ -33,7 +33,7 @@ public class Balloom extends EntityBase {
     private String playerPath = "balloom.atlas";
     private Sprite sprite;
     private GameScreen gameScreen;
-    public float timeMove = 3f;
+    public float timeMove = 0f;
     public float timeRemove = 1f;
 
     public Balloom(GameScreen gameScreen, Ellipse ellipse) {

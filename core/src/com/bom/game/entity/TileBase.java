@@ -62,6 +62,8 @@ public abstract class TileBase {
         SPEED_UP,
         FLAME_UP,
         BOMB_UP,
+        KEY,
+        PORTAL,
         NULL
     }
 }

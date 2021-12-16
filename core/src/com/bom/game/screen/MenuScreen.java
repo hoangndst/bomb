@@ -2,6 +2,7 @@ package com.bom.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bom.game.BomGame;
 import com.bom.game.manager.GameManager;
 
-public class MenuScreen extends ScreenAdapter {
+public class MenuScreen implements Screen {
 
   private BomGame game;
   private SpriteBatch batch;
@@ -47,7 +48,7 @@ public class MenuScreen extends ScreenAdapter {
 
   @Override
   public void show() {
-    viewport = new FitViewport(640, 480);
+    viewport = new FitViewport(640, 490);
     stage = new Stage(viewport, batch);
 
     font = new BitmapFont(Gdx.files.internal("fonts/foo.fnt"));
@@ -64,7 +65,7 @@ public class MenuScreen extends ScreenAdapter {
     Label ExitLabel = new Label("Exit", labelStyle);
     ExitLabel.setPosition((640 - ExitLabel.getWidth()) / 2, 160);
 
-    Pixmap pixmap = new Pixmap(640, 480, Pixmap.Format.RGB888);
+    Pixmap pixmap = new Pixmap(640, 490, Pixmap.Format.RGB888);
     pixmap.setColor(102 / 255.0f, 153 / 255.0f, 0 / 255.0f, 0);
     pixmap.fill();
     backgroundTexture = new Texture(pixmap);
@@ -188,6 +189,18 @@ public class MenuScreen extends ScreenAdapter {
     backgroundTexture.dispose();
     stage.dispose();
     font.dispose();
+  }
+
+  @Override
+  public void pause() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void resume() {
+    // TODO Auto-generated method stub
+    
   }
 
 }
