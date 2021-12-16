@@ -148,6 +148,7 @@ public class Bomberman extends EntityBase implements Disposable {
             animationHandle.setCurrentAnimation(State.DEAD.getValue());
             dead();
         }
+        // System.err.println(body.getPosition().x + " " + body.getPosition().y);
         
     }
 

@@ -84,7 +84,9 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 		countDown -= delta;
 		if (countDown <= 0 && !canDestroy) {
 			this.body.setLinearVelocity(new Vector2(0, 0));
-			bDef.position.set(UnitHelper.coordScreenToBox2D((int)(body.getPosition().x), (int)(body.getPosition().y), 0));
+			System.err.println( body.getPosition().x + " " + body.getPosition().y);
+			// bDef.position.set(UnitHelper.coordScreenToBox2D((int) body.getPosition().x, (int) body.getPosition().y, bodyDiameter / 2));
+			sprite.setPosition(UnitHelper.coordBox2DSnapToGrid(body.getPosition()).x, UnitHelper.coordBox2DSnapToGrid(body.getPosition()).y);
 			explode();
 		}
 	}
@@ -126,14 +128,17 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 				this.body.getFixtureList().get(0).setSensor(false);
 			}
 		}
-		sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
-			UnitHelper.box2DToScreen(this.body.getPosition().y, this.bodyDiameter),
-			UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
-			UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
+		if (countDown > 0) {
+			sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
+				UnitHelper.box2DToScreen(this.body.getPosition().y, this.bodyDiameter),
+				UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
+				UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
+		}
 		sprite.setRegion(animationHandle.getCurrentFrame());
 		for (Flame flame : flames) {
 			flame.update(delta);
 		}
+		// System.err.println(this.body.getPosition().x + " " + this.body.getPosition().y);
 	}
 
 	public void render(SpriteBatch batch) {
