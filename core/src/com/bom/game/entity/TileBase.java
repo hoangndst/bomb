@@ -18,6 +18,7 @@ public abstract class TileBase {
     protected Fixture fixture;
     protected Rectangle bounds;
     public static TiledMapTileSet tileSet;
+    public Type type = Type.NULL;
     protected float timeRemove = 1;
 
     public TileBase(GameScreen screen, Rectangle bounds) {
@@ -51,5 +52,16 @@ public abstract class TileBase {
         f.categoryBits = categoryBit;
         f.maskBits = maskBits;
         fixture.setFilterData(f);
+    }
+
+    public abstract void handleAction();
+
+    public static enum Type {
+        BRICK,
+        WALL,
+        SPEED_UP,
+        FLAME_UP,
+        BOMB_UP,
+        NULL
     }
 }

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="89">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="104">
  <tileset firstgid="1" source="tileset_all.tsx"/>
+ <tileset firstgid="2882" name="item" tilewidth="15" tileheight="15" spacing="1" margin="1" tilecount="315" columns="15">
+  <image source="item.png" width="250" height="348"/>
+ </tileset>
  <layer id="7" name="floor" width="17" height="13">
   <data encoding="csv">
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
@@ -16,6 +19,23 @@
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <layer id="9" name="item" width="17" height="13">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2884,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,2884,0,0,0,0,0,2882,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,2883,0,0,0,2883,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,2882,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="1" name="background" width="17" height="13">
@@ -68,6 +88,18 @@
   <object id="53" x="80" y="160" width="16.125" height="16"/>
   <object id="54" x="48" y="160" width="16" height="16"/>
  </objectgroup>
+ <objectgroup id="11" name="item_flame_up">
+  <object id="100" x="96.5" y="145" width="14.25" height="14"/>
+  <object id="101" x="160.25" y="145.375" width="13.75" height="13.25"/>
+ </objectgroup>
+ <objectgroup id="12" name="item_bomb_up">
+  <object id="102" x="144.5" y="81.375" width="13.625" height="13.375"/>
+  <object id="103" x="208.25" y="177.25" width="14.375" height="13.75"/>
+ </objectgroup>
+ <objectgroup id="10" name="item_speed_up">
+  <object id="98" x="64.5455" y="32.4545" width="14.9091" height="14.9091"/>
+  <object id="99" x="48.6364" y="80.9091" width="14.3636" height="14.5455"/>
+ </objectgroup>
  <objectgroup id="6" name="brick">
   <object id="62" x="32" y="32" width="16" height="16"/>
   <object id="63" x="64" y="32" width="16" height="16"/>
@@ -96,5 +128,22 @@
   <object id="86" x="224" y="176" width="16" height="16"/>
   <object id="87" x="224.455" y="48" width="15.5455" height="16"/>
   <object id="88" x="224" y="64" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="8" name="balloom">
+  <object id="89" x="195.545" y="143.818" width="13.5455" height="13.3636">
+   <ellipse/>
+  </object>
+  <object id="90" x="131.227" y="142.5" width="13.5455" height="13.3636">
+   <ellipse/>
+  </object>
+  <object id="91" x="131.318" y="174.955" width="13.5455" height="13.3636">
+   <ellipse/>
+  </object>
+  <object id="96" x="65.9772" y="143.318" width="13.5455" height="13.3636">
+   <ellipse/>
+  </object>
+  <object id="97" x="34.9772" y="48.8182" width="13.5455" height="13.3636">
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>

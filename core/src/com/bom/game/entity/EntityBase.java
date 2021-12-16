@@ -1,11 +1,13 @@
 package com.bom.game.entity;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bom.game.modules.BitCollision;
 
 public abstract class EntityBase {
     
     public EntityType type;
     public boolean canDestroy = false;
+    public boolean isDead = false;
     public EntityManager entityManager;
 
     public EntityBase() {}
@@ -33,8 +35,11 @@ public abstract class EntityBase {
         private final short bitCollision;
 
         private EntityType(short bitCollision) {
-        this.bitCollision = bitCollision;
+            this.bitCollision = bitCollision;
         }
     }
+
+    public abstract void update(float delta);
+    public abstract void render(SpriteBatch batch);
 
 }

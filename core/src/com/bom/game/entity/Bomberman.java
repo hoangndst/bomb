@@ -24,8 +24,8 @@ public class Bomberman extends EntityBase implements Disposable {
 
     private World world;
     private ArrayList<Bomb> bombs;
-    private int bombCount = 3;
-    private int flameLength = 3;
+    private int bombCount = 1;
+    private int flameLength = 1;
     private AnimationHandle animationHandle;
     private float FRAME_TIME = 0.6f;
     private float speed = 2.5f;
@@ -129,8 +129,20 @@ public class Bomberman extends EntityBase implements Disposable {
         }
     }
 
+    public void speedUp() {
+        speed += 1;
+    }
+
+    public void BombUp() {
+        bombCount++;
+    }
+
+    public void FlameUp() {
+        flameLength++;
+    }
 
     public void update(float deltaTime) {
+        System.err.println(bombCount);
         handleInput(deltaTime);
         checkExplode(deltaTime);
         sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
@@ -161,6 +173,9 @@ public class Bomberman extends EntityBase implements Disposable {
 
     public void dead() {
         if (time <= 0) {
+            bombCount = 1;
+            flameLength = 1;
+            speed = 2.5f;
             this.world.destroyBody(this.body);
             definePlayer(initPosition);
             this.direction = State.IDLE_DOWN;
@@ -180,7 +195,7 @@ public class Bomberman extends EntityBase implements Disposable {
         // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
         fDef.filter.categoryBits = BitCollision.BOMBERMAN;
         fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
-            BitCollision.BOMB, BitCollision.FLAME);
+            BitCollision.BOMB, BitCollision.FLAME, BitCollision.ENEMY, BitCollision.ITEM);
         fDef.shape = shape;
         // fdef.isSensor = true;
         body.createFixture(fDef).setUserData(this);

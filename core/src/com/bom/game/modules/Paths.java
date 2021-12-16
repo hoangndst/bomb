@@ -10,16 +10,12 @@ public class Paths {
     //Tiled Layers
     public static final String tiledBackgroundLayer = "background";
     public static final String tiledWallsLayer = "wall";
+    public static final String tiledBalloomLayer = "balloom";
     public static final String tiledChestsLayer = "brick";
     public static final String tiledMagnetsLayer = "magnets";
     public static final String tiledKeysLayer = "keys";
+    public static final String tiledSpeedUPLayer = "item_speed_up";
+    public static final String tiledFlameUpLayer = "item_flame_up";
+    public static final String tiledBombUPLayer = "item_bomb_up";
     
-    //Animation
-    public static final String bombermanTexture = "bomberman.png";
-    public static final String bombAndFireTexture = "bombs-normal.png";
-    
-    //Animations Jsons
-    public static final String bombermanJson = "bomberman.json";
-    public static final String bombJson = "bombs-normal.json";
-    public static final String fireJson = "fire.json";
 }
