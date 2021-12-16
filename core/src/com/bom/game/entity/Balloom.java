@@ -1,7 +1,6 @@
 package com.bom.game.entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.btree.decorator.Random;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,126 +16,129 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bom.game.animation.AnimationHandle;
 import com.bom.game.modules.BitCollision;
+import com.bom.game.modules.Hud;
 import com.bom.game.modules.UnitHelper;
 import com.bom.game.screen.GameScreen;
 
 public class Balloom extends EntityBase {
-    
-    private World world;
-    private AnimationHandle animationHandle;
-    private float FRAME_TIME = 1f;
-    private float speed = 2.5f;
-    public Body body;
-    private static BodyDef bDef = new BodyDef();
-    private static FixtureDef fDef = new FixtureDef();
-    private static Circle circle = new Circle();
-    private String playerPath = "balloom.atlas";
-    private Sprite sprite;
-    private GameScreen gameScreen;
-    public float timeMove = 0f;
-    public float timeRemove = 1f;
 
-    public Balloom(GameScreen gameScreen, Ellipse ellipse) {
-        super(gameScreen.entityCreator.entityManager);
-        canDestroy = false;
-        this.world = gameScreen.getWorld();
-        this.type = EntityType.BOMBERMAN;
-        this.gameScreen = gameScreen;
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
-        animationHandle = new AnimationHandle();
-        animationHandle.addAnimation(State.BALLOOM_IDLE.getValue(),
-            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_IDLE.getValue())));
-        animationHandle.addAnimation(State.BALLOOM_DEAD.getValue(),
-            new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_DEAD.getValue())));
-        animationHandle.setCurrentAnimation(State.BALLOOM_IDLE.getValue());
-        sprite = new Sprite(animationHandle.getCurrentFrame());
-        sprite.setPosition(ellipse.x, ellipse.y);
-        defineBalloom(ellipse);
+  private World world;
+  private AnimationHandle animationHandle;
+  private float FRAME_TIME = 1f;
+  private float speed = 2.5f;
+  public Body body;
+  private static BodyDef bDef = new BodyDef();
+  private static FixtureDef fDef = new FixtureDef();
+  private static Circle circle = new Circle();
+  private String playerPath = "balloom.atlas";
+  private Sprite sprite;
+  private GameScreen gameScreen;
+  public float timeMove = 0f;
+  public float timeRemove = 1f;
+
+  public Balloom(GameScreen gameScreen, Ellipse ellipse) {
+    super(gameScreen.entityCreator.entityManager);
+    canDestroy = false;
+    this.world = gameScreen.getWorld();
+    this.type = EntityType.BOMBERMAN;
+    this.gameScreen = gameScreen;
+    TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
+    animationHandle = new AnimationHandle();
+    animationHandle.addAnimation(State.BALLOOM_IDLE.getValue(),
+        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_IDLE.getValue())));
+    animationHandle.addAnimation(State.BALLOOM_DEAD.getValue(),
+        new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_DEAD.getValue())));
+    animationHandle.setCurrentAnimation(State.BALLOOM_IDLE.getValue());
+    sprite = new Sprite(animationHandle.getCurrentFrame());
+    sprite.setPosition(ellipse.x, ellipse.y);
+    defineBalloom(ellipse);
+  }
+
+  private void defineBalloom(Ellipse ellipse) {
+    bDef.type = BodyDef.BodyType.DynamicBody;
+    bDef.position.set(UnitHelper.coordPixelsToMeters(ellipse.x, ellipse.y));
+    body = world.createBody(bDef);
+    CircleShape shape = new CircleShape();
+    shape.setRadius(0.875f / 2);
+    // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
+    fDef.filter.categoryBits = BitCollision.ENEMY;
+    fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
+        BitCollision.BOMB, BitCollision.FLAME, BitCollision.BOMBERMAN, BitCollision.ENEMY);
+    fDef.shape = shape;
+    // fdef.isSensor = true;
+    body.createFixture(fDef).setUserData(this);
+  }
+
+  public int getRandomNumber(int min, int max) {
+    return (int) ((Math.random() * (max - min)) + min);
+  }
+
+  private void randomMove(float delta) {
+    timeMove -= delta;
+    if (timeMove <= 0) {
+      int random = getRandomNumber(1, 5);
+      switch (random) {
+        case 1:
+          body.setLinearVelocity(new Vector2(speed, 0));
+          break;
+        case 2:
+          body.setLinearVelocity(new Vector2(-speed, 0));
+          break;
+        case 3:
+          body.setLinearVelocity(new Vector2(0, speed));
+          break;
+        case 4:
+          body.setLinearVelocity(new Vector2(0, -speed));
+          break;
+      }
+      timeMove = 3f;
+    }
+  }
+
+
+  public void dead() {
+    if (timeRemove <= 0) {
+      Hud.addScore(1000);
+      this.world.destroyBody(this.body);
+      isDead = true;
+    }
+  }
+
+  @Override
+  public void update(float delta) {
+    if (canDestroy) {
+      this.body.setLinearVelocity(new Vector2(0, 0));
+      animationHandle.setCurrentAnimation(State.BALLOOM_DEAD.getValue());
+      timeRemove -= delta;
+    } else {
+      randomMove(delta);
+    }
+    sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
+        UnitHelper.box2DToScreen(body.getPosition().y, 0.875f),
+        UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
+        UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
+    sprite.setPosition(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
+        UnitHelper.box2DToScreen(body.getPosition().y, 0.875f));
+    sprite.setRegion(animationHandle.getCurrentFrame());
+  }
+
+  @Override
+  public void render(SpriteBatch batch) {
+    sprite.draw(batch);
+  }
+
+  private enum State {
+
+    BALLOOM_IDLE("balloom_idle"), BALLOOM_DEAD("balloom_dead");
+
+    private String value;
+
+    private State(String value) {
+      this.value = value;
     }
 
-    private void defineBalloom(Ellipse ellipse) {
-        bDef.type = BodyDef.BodyType.DynamicBody;
-        bDef.position.set(UnitHelper.coordPixelsToMeters(ellipse.x, ellipse.y));
-        body = world.createBody(bDef);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(0.875f / 2);
-        // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
-        fDef.filter.categoryBits = BitCollision.ENEMY;
-        fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
-            BitCollision.BOMB, BitCollision.FLAME, BitCollision.BOMBERMAN, BitCollision.ENEMY);
-        fDef.shape = shape;
-        // fdef.isSensor = true;
-        body.createFixture(fDef).setUserData(this);
+    public String getValue() {
+      return value;
     }
-
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
-
-    private void randomMove(float delta) {
-        timeMove -= delta;
-        if (timeMove <= 0) {
-            int random = getRandomNumber(1, 5);
-            switch (random) {
-                case 1:
-                    body.setLinearVelocity(new Vector2(speed, 0));
-                    break;
-                case 2:
-                    body.setLinearVelocity(new Vector2(-speed, 0));
-                    break;
-                case 3:
-                    body.setLinearVelocity(new Vector2(0, speed));
-                    break;
-                case 4:
-                    body.setLinearVelocity(new Vector2(0, -speed));
-                    break;
-            }
-            timeMove = 3f;
-        }
-    }
-
-
-    public void dead() {
-        if (timeRemove <= 0) {
-            this.world.destroyBody(this.body);
-            isDead = true;
-        }
-    }
-
-    public void update(float delta) {
-        if (canDestroy) {
-            this.body.setLinearVelocity(new Vector2(0, 0));
-            animationHandle.setCurrentAnimation(State.BALLOOM_DEAD.getValue());
-            timeRemove -= delta;
-        } else  {
-            randomMove(delta);
-        }
-        sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-            UnitHelper.box2DToScreen(body.getPosition().y, 0.875f),
-            UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
-            UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
-        sprite.setPosition(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-            UnitHelper.box2DToScreen(body.getPosition().y, 0.875f));
-        sprite.setRegion(animationHandle.getCurrentFrame());
-    }
-
-    public void render(SpriteBatch batch) {
-        sprite.draw(batch);
-    }
-
-    private enum State {
-
-        BALLOOM_IDLE("balloom_idle"),
-        BALLOOM_DEAD("balloom_dead");
-
-        private String value;
-
-        private State(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
+  }
 }
