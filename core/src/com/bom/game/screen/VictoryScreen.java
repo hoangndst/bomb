@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bom.game.BomGame;
 import com.bom.game.manager.GameManager;
+import com.bom.game.modules.Hud;
 
 public class VictoryScreen extends ScreenAdapter {
 
@@ -22,6 +24,7 @@ public class VictoryScreen extends ScreenAdapter {
     private Stage stage;
 
     private BitmapFont font;
+
 
     public VictoryScreen(BomGame game) {
         this.game = game;
@@ -35,14 +38,29 @@ public class VictoryScreen extends ScreenAdapter {
 
         font = new BitmapFont(Gdx.files.internal("fonts/foo.fnt"));
 
+        
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
-        Label gameOverLabel = new Label("Victory", labelStyle);
-        gameOverLabel.setPosition((640 - gameOverLabel.getWidth()) / 2, 226f);
+        Label victoryLabel = new Label("Victory", labelStyle);
+        victoryLabel.setPosition((640 - victoryLabel.getWidth()) / 2, 226f);
+        
+        Label scoreLabel = new Label("Score", labelStyle);
+        Label scoreLabel2 = new Label(String.format("%06d", Hud.score), labelStyle);
+        scoreLabel.setFontScale(0.9f);
+        scoreLabel2.setFontScale(0.9f);
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
+        table.add(victoryLabel).expandX().padTop(150f);
+        table.row();
+        table.add(scoreLabel).expandX().padTop(10f);
+        table.row();
+        table.add(scoreLabel2).expandX();
+
 
         GameManager.getInstance().playMusic("Victory.ogg", false);
 
-        stage.addActor(gameOverLabel);
-
+        // stage.addActor(v);
+        stage.addActor(table);
         stage.addAction(Actions.sequence(
                 Actions.delay(2f),
                 Actions.fadeOut(2f),

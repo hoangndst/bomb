@@ -49,7 +49,6 @@ public class Bomberman extends EntityBase implements Disposable {
         canDestroy = false;
         this.world = gameScreen.getWorld();
         this.bombs = new ArrayList<Bomb>();
-        this.type = EntityType.BOMBERMAN;
         this.gameScreen = gameScreen;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();
@@ -121,8 +120,6 @@ public class Bomberman extends EntityBase implements Disposable {
                 Bomb bomb = bombPool.get().obtain();
                 bomb = new Bomb();
                 bomb.init(this, UnitHelper.coordBox2DSnapToGrid(body.getPosition()), flameLength);
-                // Bomb bomb = new Bomb(this.gameScreen,
-                // UnitHelper.coordBox2DSnapToGrid(body.getPosition()));
                 bombs.add(bomb);
                 bombCount--;
                 canPlaceBombs = false;
@@ -144,7 +141,6 @@ public class Bomberman extends EntityBase implements Disposable {
     }
 
     public void update(float deltaTime) {
-        // System.err.println(bombCount);
         GameManager.timeGhostMode -= deltaTime;
         handleInput(deltaTime);
         checkExplode(deltaTime);
@@ -163,8 +159,6 @@ public class Bomberman extends EntityBase implements Disposable {
             animationHandle.setCurrentAnimation(State.DEAD.getValue());
             dead();
         }
-        // System.err.println(body.getPosition().x + " " + body.getPosition().y);
-        
     }
 
     public void render(SpriteBatch batch) {
@@ -176,17 +170,17 @@ public class Bomberman extends EntityBase implements Disposable {
 
     public void dead() {
         canPlaceBombs = false;
-        if (time <= 0) {
+        if (time <= 0 && GameManager.bombermanLive > 0) {
             GameManager.bombermanLive--;
-            bombCount = 1;
-            flameLength = 1;
-            speed = 2.5f;
+            this.bombCount = 1;
+            this.flameLength = 1;
+            this.speed = 2.5f;
             this.world.destroyBody(this.body);
             definePlayer(initPosition);
             this.direction = State.IDLE_DOWN;
-            canDestroy = false;
-            time = 1.5f;
-            GameManager.timeGhostMode = 10f;
+            this.canDestroy = false;
+            this.time = 1.5f;
+            GameManager.timeGhostMode = 3f;
         }
     }
 
@@ -199,12 +193,10 @@ public class Bomberman extends EntityBase implements Disposable {
 
         CircleShape shape = new CircleShape();
         shape.setRadius(0.875f / 2);
-        // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
         fDef.filter.categoryBits = BitCollision.BOMBERMAN;
         fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
             BitCollision.BOMB, BitCollision.FLAME, BitCollision.ENEMY, BitCollision.ITEM);
         fDef.shape = shape;
-        // fdef.isSensor = true;
         body.createFixture(fDef).setUserData(this);
     }
 
@@ -231,11 +223,11 @@ public class Bomberman extends EntityBase implements Disposable {
         private String value;
 
         private State(String value) {
-        this.value = value;
+            this.value = value;
         }
 
         public String getValue() {
-        return value;
+            return value;
         }
     }
 

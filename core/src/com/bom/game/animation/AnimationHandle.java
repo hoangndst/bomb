@@ -58,11 +58,4 @@ public class AnimationHandle {
         timer += Gdx.graphics.getDeltaTime();
         return animations.get(currentAnimation).getKeyFrame(timer, looping);
     }
-
-    @Override
-    public String toString() {
-        return "AnimationHandler{" + "timer=" + timer + ", looping=" + looping + ", current='"
-            + currentAnimation + '\'' + ", frame="
-            + animations.get(currentAnimation).getKeyFrameIndex(timer) + '}';
-    }
 }

@@ -27,6 +27,5 @@ public class Wall extends TileBase {
     @Override
     public void handleAction() {
         // TODO Auto-generated method stub
-        
     }
 }

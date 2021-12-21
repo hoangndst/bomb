@@ -5,16 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bom.game.screen.GameScreen;
 import com.bom.game.screen.MenuScreen;
+import com.bom.game.screen.VictoryScreen;
 
 public class BomGame extends Game {
     public SpriteBatch batch;
     Texture img;
-
-    public static final String TITLE = "Bomberman";
-    public static final float PPM = 16;
-    public static final float PPT = 16;
-    public static final float WIDTH = 17 * PPM;
-    public static final float HEIGHT = 13 * PPM;
     // public static final float SCALE = 3;
     public GameScreen gameScreen;
 

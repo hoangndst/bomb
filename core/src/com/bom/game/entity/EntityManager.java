@@ -51,13 +51,11 @@ public class EntityManager {
     }
 
     public void update(float delta) {
-        // for (TileBase item : items) {
-        //     System.err.println(item);
-        // }
-        // System.err.println(enemies.size());
         EnemyBase temp = null;
         for (EnemyBase enemy : enemies) {
-            // System.err.println(enemy.canDestroy + " " + enemy.isDead + " " + enemy.timeRemove);
+            System.err.println(enemy);
+        }
+        for (EnemyBase enemy : enemies) {
             if (enemy.canDestroy && !enemy.isDead && enemy.timeRemove <= 0) {
                 enemy.dead();
                 temp = enemy;
@@ -84,7 +82,7 @@ public class EntityManager {
     }
 
     public boolean enemiesIsClear() {
-        return enemies.size() == 0;
+        return enemies.size() <= 0;
     }
 
 }

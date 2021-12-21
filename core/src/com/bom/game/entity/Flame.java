@@ -28,13 +28,10 @@ public class Flame extends EntityBase implements Disposable {
     private String playerPath = "flame.atlas";
     private Sprite sprite;
     private float bodyDiameter = 0.875f;
-    private Bomb bomb;
 
     public Flame(Bomb bomb, Vector2 position, State direction) {
         super(bomb.getEntityManager());
-        this.bomb = bomb;
         this.world = bomb.world;
-        this.type = EntityType.FLAME;
         // this.gameScreen = bomb.gameScreen;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();

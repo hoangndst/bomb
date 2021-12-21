@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.Pool;
 public class BombPool {
     
     protected final Pool<Bomb> pool = new Pool<Bomb>() {
-	@Override
-	protected Bomb newObject() {
-		return new Bomb();
-	}
+        @Override
+        protected Bomb newObject() {
+            return new Bomb();
+        }
     };
 
     public Pool<Bomb> get() {
