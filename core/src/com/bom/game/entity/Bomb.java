@@ -40,13 +40,11 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
     public float timeRemove;
     public boolean canMove = true;
     public boolean canKick = false;
-    // private State direction = State.IDLE_DOWN;
 
     public Bomb() {
         timeRemove = 0.8f;
         canDestroy = false;
         flames = new ArrayList<Flame>();
-        this.type = EntityType.BOMB;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();
         animationHandle.addAnimation(State.BOMB_IDLE.getValue(),
@@ -87,42 +85,32 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
     private void willExplode(float delta) {
         countDown -= delta;
         if (countDown <= 0 && !canDestroy) {
-        this.body.setLinearVelocity(new Vector2(0, 0));
-        System.err.println(body.getPosition().x + " " + body.getPosition().y);
-        // bDef.position.set(UnitHelper.coordScreenToBox2D((int) body.getPosition().x, (int)
-        // body.getPosition().y, bodyDiameter / 2));
-        sprite.setPosition(UnitHelper.coordBox2DSnapToGrid(body.getPosition()).x,
-            UnitHelper.coordBox2DSnapToGrid(body.getPosition()).y);
-        explode();
+            this.body.setLinearVelocity(new Vector2(0, 0));
+            System.err.println(body.getPosition().x + " " + body.getPosition().y);
+            sprite.setPosition(UnitHelper.coordBox2DSnapToGrid(body.getPosition()).x,
+                UnitHelper.coordBox2DSnapToGrid(body.getPosition()).y);
+            explode();
         }
     }
 
     private void explode() {
         GameManager.getInstance().playSound("Explosion.ogg");
         animationHandle.setCurrentAnimation(State.BOMB_EXPLODE.getValue());
-        Flame flameMid =
-            new Flame(this, UnitHelper.coordBox2DSnapToGrid(body.getPosition()), Flame.State.FLAME_UP);
+        Flame flameMid = new Flame(this, UnitHelper.coordBox2DSnapToGrid(body.getPosition()), Flame.State.FLAME_UP);
         for (Flame.State direction : Flame.State.values()) {
-        Vector2 position, nextPosition;
-        for (int i = 0; i <= flameLength; i++) {
-
-            position = UnitHelper
-                .coordBox2DSnapToGrid(body.getPosition().add(Flame.State.getOffSet(direction).scl(i)));
-
-            Vector2 temp = body.getPosition().add(Flame.State.getOffSet(direction).scl(i + 1));
-
-            nextPosition = UnitHelper.coordMetersToPixels(temp.x, temp.y);
-
-            if (i != 0) {
-            // System.out.printf("(%.2f %.2f)\n",position.x, position.y);
-            // number++;
-            Flame flame = new Flame(this, position, direction);
-            this.flames.add(flame);
+            Vector2 position, nextPosition;
+            for (int i = 0; i <= flameLength; i++) {
+                position = UnitHelper.coordBox2DSnapToGrid(body.getPosition().add(Flame.State.getOffSet(direction).scl(i)));
+                Vector2 temp = body.getPosition().add(Flame.State.getOffSet(direction).scl(i + 1));
+                nextPosition = UnitHelper.coordMetersToPixels(temp.x, temp.y);
+                if (i != 0) {
+                    Flame flame = new Flame(this, position, direction);
+                    this.flames.add(flame);
+                }
+                if (entityManager.wallContainsPosition(nextPosition)) {
+                    break;
+                }
             }
-
-            if (entityManager.wallContainsPosition(nextPosition))
-            break;
-        }
         }
         this.flames.add(flameMid);
         canDestroy = true;
@@ -158,8 +146,8 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
     @Override
     public void render(SpriteBatch batch) {
         sprite.draw(batch);
-        for (int i = 0; i < flames.size() - 1; i++) {
-        flames.get(i).render(batch);
+            for (int i = 0; i < flames.size() - 1; i++) {
+            flames.get(i).render(batch);
         }
     }
 
@@ -169,11 +157,11 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
         String stateName;
 
         private State(String stateName) {
-        this.stateName = stateName;
+            this.stateName = stateName;
         }
 
         public String getValue() {
-        return stateName;
+            return stateName;
         }
     }
 
@@ -196,7 +184,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
     public void dispose() {
         this.sprite.getTexture().dispose();
         for (Flame flame : flames) {
-        flame.dispose();
+            flame.dispose();
         }
     }
 

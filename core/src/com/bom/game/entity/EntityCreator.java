@@ -45,40 +45,8 @@ public class EntityCreator {
         createKey();
         createPortal();
         createBulbObjects();
-        // createStaticObjectsFromLayer(StringPaths.tiledMagnetsLayer, CollisionBits.MAGNET,
-        //         CollisionBits.orOperation(
-        //                 CollisionBits.PLAYER,
-        //                 CollisionBits.BOMB
-        //         )
-        // );
     }
     
-    // private void createStaticObjectsFromLayer(String layer, short categoryBits, short maskBits) {
-        
-    //     for (MapObject object : gameScreen.getMap().getLayers().get(layer)
-    //             .getObjects().getByType(RectangleMapObject.class)) {
-            
-    //         Rectangle rect = ((RectangleMapObject) object).getRectangle();
-
-    //         bDef.type = BodyDef.BodyType.StaticBody;
-    //         bDef.position.set(
-    //                 UnitHelper.coordPixelsToMeters(
-    //                     UnitHelper.screenToBox2D(rect.getX(), rect.getWidth()),
-    //                     UnitHelper.screenToBox2D(rect.getY(), rect.getHeight())
-    //                 )
-    //         );
-    //         body = GameScreen.getWorld().createBody(bDef);
-
-    //         pShape.setAsBox(
-    //                 UnitHelper.pixelsToMeters(rect.getWidth() / 2),
-    //                 UnitHelper.pixelsToMeters(rect.getHeight() / 2)
-    //         );
-    //         fDef.shape = pShape;
-    //         fDef.filter.categoryBits = categoryBits;
-    //         fDef.filter.maskBits = maskBits;
-    //         body.createFixture(fDef);
-    //     }
-    // }
     
     private void createWallObjects() {
         for (MapObject object : gameScreen.getMap().getLayers().get(Paths.tiledWallsLayer)

@@ -29,10 +29,8 @@ public class Balloom extends EnemyBase {
     public Body body;
     private static BodyDef bDef = new BodyDef();
     private static FixtureDef fDef = new FixtureDef();
-    private static Circle circle = new Circle();
     private String playerPath = "balloom.atlas";
     private Sprite sprite;
-    private GameScreen gameScreen;
 
     public Balloom(GameScreen gameScreen, Ellipse ellipse) {
         super(gameScreen.entityCreator.entityManager);
@@ -41,8 +39,6 @@ public class Balloom extends EnemyBase {
         this.enemyLive = 1;
         this.canDestroy = false;
         this.world = gameScreen.getWorld();
-        this.type = EntityType.BOMBERMAN;
-        this.gameScreen = gameScreen;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();
         animationHandle.addAnimation(State.BALLOOM_UP.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BALLOOM_UP.getValue())));
@@ -62,7 +58,6 @@ public class Balloom extends EnemyBase {
         body = world.createBody(bDef);
         CircleShape shape = new CircleShape();
         shape.setRadius(0.875f / 2);
-        // shape.setPosition(new Vector2(0, -6 / BomGame.PPM));
         fDef.filter.categoryBits = BitCollision.ENEMY;
         fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL, BitCollision.BRICK,
             BitCollision.BOMB, BitCollision.FLAME, BitCollision.BOMBERMAN, BitCollision.ENEMY);

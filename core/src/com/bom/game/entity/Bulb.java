@@ -29,10 +29,8 @@ public class Bulb extends EnemyBase {
     public Body body;
     private static BodyDef bDef = new BodyDef();
     private static FixtureDef fDef = new FixtureDef();
-    private static Circle circle = new Circle();
     private String playerPath = "bulb.atlas";
     private Sprite sprite;
-    private GameScreen gameScreen;
     
 
     public Bulb(GameScreen gameScreen, Ellipse ellipse) {
@@ -42,8 +40,6 @@ public class Bulb extends EnemyBase {
         this.enemyLive = 2;
         this.canDestroy = false;
         this.world = gameScreen.getWorld();
-        this.type = EntityType.BOMBERMAN;
-        this.gameScreen = gameScreen;
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
         animationHandle = new AnimationHandle();
         animationHandle.addAnimation(State.BULB_DEAD.getValue(), new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions(State.BULB_DEAD.getValue())));

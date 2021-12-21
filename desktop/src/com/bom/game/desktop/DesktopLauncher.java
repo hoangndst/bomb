@@ -12,4 +12,4 @@ public class DesktopLauncher {
         config.resizable = false;
         new LwjglApplication(new BomGame(), config);
     }
-}
+} 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="113">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="116">
  <tileset firstgid="1" source="tileset_all.tsx"/>
  <tileset firstgid="2882" name="item" tilewidth="15" tileheight="15" spacing="1" margin="1" tilecount="315" columns="15">
   <image source="item.png" width="250" height="348"/>
@@ -155,6 +155,15 @@
    <ellipse/>
   </object>
   <object id="112" x="129.667" y="177.121" width="12.6667" height="12.6667">
+   <ellipse/>
+  </object>
+  <object id="113" x="130.25" y="145.75" width="13" height="12.25">
+   <ellipse/>
+  </object>
+  <object id="114" x="80.5" y="178.5" width="12" height="13.5">
+   <ellipse/>
+  </object>
+  <object id="115" x="99.25" y="49.75" width="11" height="11.75">
    <ellipse/>
   </object>
  </objectgroup>

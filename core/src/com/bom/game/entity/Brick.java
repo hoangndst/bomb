@@ -10,37 +10,37 @@ import com.bom.game.screen.GameScreen;
 
 public class Brick extends TileBase {
 
-  private TiledMap map;
+    private TiledMap map;
 
-  public Brick(GameScreen gameScreen, Rectangle bounds) {
-    super(gameScreen, bounds);
-    this.map = gameScreen.getMap();
-    setCollisionFilter(BitCollision.BRICK, BitCollision.orOperation(BitCollision.BOMBERMAN,
-        BitCollision.BOMB, BitCollision.FLAME, BitCollision.ENEMY));
-    this.type = Type.BRICK;
+    public Brick(GameScreen gameScreen, Rectangle bounds) {
+        super(gameScreen, bounds);
+        this.map = gameScreen.getMap();
+        setCollisionFilter(BitCollision.BRICK, BitCollision.orOperation(BitCollision.BOMBERMAN,
+            BitCollision.BOMB, BitCollision.FLAME, BitCollision.ENEMY));
+        this.type = Type.BRICK;
 
-  }
+    }
 
-  private TiledMapTileLayer.Cell getCell() {
-    TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("background");
-    // System.err.println((int) body.getPosition().x + ", " + (int) body.getPosition().y);
-    return layer.getCell((int) body.getPosition().x, (int) body.getPosition().y);
+    private TiledMapTileLayer.Cell getCell() {
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("background");
+        // System.err.println((int) body.getPosition().x + ", " + (int) body.getPosition().y);
+        return layer.getCell((int) body.getPosition().x, (int) body.getPosition().y);
 
-  }
+    }
 
-  public void handleBom() {
-    getCell().setTile(null);
-    Filter newFilter = new Filter();
-    newFilter.categoryBits = BitCollision.DESTROYED_BRICK;
-    newFilter.maskBits = fixture.getFilterData().maskBits;
-    fixture.setFilterData(newFilter);
-    Hud.addScore(100);
-  }
+    public void handleBom() {
+        getCell().setTile(null);
+        Filter newFilter = new Filter();
+        newFilter.categoryBits = BitCollision.DESTROYED_BRICK;
+        newFilter.maskBits = fixture.getFilterData().maskBits;
+        fixture.setFilterData(newFilter);
+        Hud.addScore(100);
+    }
 
-  @Override
-  public void handleAction() {
-    // TODO Auto-generated method stub
+    @Override
+    public void handleAction() {
+        // TODO Auto-generated method stub
 
-  }
+    }
 }
 
