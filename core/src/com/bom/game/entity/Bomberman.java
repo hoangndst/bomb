@@ -41,7 +41,7 @@ public class Bomberman extends EntityBase implements Disposable {
 	private float bombCooldown = 1, bombCooldownTimer = bombCooldown;
 	private boolean canPlaceBombs = true;
 	private BombPool bombPool;
-	public float time = 1.5f;
+	public float time = 2f;
 	private Vector2 initPosition;
 
 	public Bomberman(GameScreen gameScreen, Vector2 position) {
@@ -199,7 +199,7 @@ public class Bomberman extends EntityBase implements Disposable {
 			definePlayer(initPosition);
 			this.direction = State.IDLE_DOWN;
 			this.canDestroy = false;
-			this.time = 1.5f;
+			this.time = 2f;
 			GameManager.timeGhostMode = 3f;
 		}
 	}

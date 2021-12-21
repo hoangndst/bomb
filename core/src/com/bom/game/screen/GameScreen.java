@@ -80,16 +80,11 @@ public class GameScreen implements Screen {
 		renderer.setView(camera);
 		bomberman.update(delta);
 		entityCreator.entityManager.update(delta);
-		// System.err.println(GameManager.bombermanLive);
 		if (GameManager.bombermanLive <= 0 || hud.isTimeUp()) {
 			GameManager.getInstance().reset();
 			bomGame.setScreen(new GameOverScreen(bomGame));
 		}
 		hud.update(delta);
-		System.err.println("haskey: " + GameManager.bombermanHasKey);
-		System.err.println("inPortal: " + GameManager.bombermanInPortal);
-		System.err.println(
-				"clear: " + entityCreator.entityManager.enemiesIsClear());
 		if (GameManager.bombermanHasKey && GameManager.bombermanInPortal
 				&& entityCreator.entityManager.enemiesIsClear()) {
 
