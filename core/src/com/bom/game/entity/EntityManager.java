@@ -53,16 +53,12 @@ public class EntityManager {
     public void update(float delta) {
         EnemyBase temp = null;
         for (EnemyBase enemy : enemies) {
-            System.err.println(enemy);
-        }
-        for (EnemyBase enemy : enemies) {
             if (enemy.canDestroy && !enemy.isDead && enemy.timeRemove <= 0) {
                 enemy.dead();
                 temp = enemy;
             } else {
                 enemy.update(delta);
             }
-            
         }
         if (temp != null) {
             this.enemies.remove(temp);

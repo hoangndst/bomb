@@ -243,4 +243,8 @@ public class Bomberman extends EntityBase implements Disposable {
         return bombs;
     }
 
+    public int getFlameLength() {
+        return flameLength;
+    }
+
 }

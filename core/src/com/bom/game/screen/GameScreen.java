@@ -82,9 +82,9 @@ public class GameScreen implements Screen {
             bomGame.setScreen(new GameOverScreen(bomGame));
         }
         hud.update(delta);
-        System.err.println("haskey: " + GameManager.bombermanHasKey);
-        System.err.println("inPortal: " + GameManager.bombermanInPortal);
-        System.err.println("clear: " + entityCreator.entityManager.enemiesIsClear());
+        // System.err.println("haskey: " + GameManager.bombermanHasKey);
+        // System.err.println("inPortal: " + GameManager.bombermanInPortal);
+        // System.err.println("clear: " + entityCreator.entityManager.enemiesIsClear());
         if (GameManager.bombermanHasKey && GameManager.bombermanInPortal
             && entityCreator.entityManager.enemiesIsClear()) {
             
@@ -240,5 +240,9 @@ public class GameScreen implements Screen {
 
     public Hud getHud() {
         return hud;
+    }
+
+    public Bomberman getBomberman() {
+        return bomberman;
     }
 }

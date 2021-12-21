@@ -119,32 +119,33 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
     @Override
     public void update(float delta) {
         if (countDown <= 0) {
-        timeRemove -= delta;
+            timeRemove -= delta;
         }
         willExplode(delta);
         if (!sensorFlag) {
-        if (this.body != null) {
-            this.body.getFixtureList().get(0).setSensor(false);
-        }
+            if (this.body != null) {
+                this.body.getFixtureList().get(0).setSensor(false);
+            }
         }
         if (!canMove) {
         this.body.setType(BodyDef.BodyType.StaticBody);
         }
         if (countDown > 0) {
-        sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
+            sprite.setBounds(UnitHelper.box2DToScreen(this.body.getPosition().x, this.bodyDiameter),
             UnitHelper.box2DToScreen(this.body.getPosition().y, this.bodyDiameter),
             UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionWidth()),
             UnitHelper.pixelsToMeters(animationHandle.getCurrentFrame().getRegionHeight()));
         }
         sprite.setRegion(animationHandle.getCurrentFrame());
         for (Flame flame : flames) {
-        flame.update(delta);
+            flame.update(delta);
         }
         // System.err.println(this.body.getPosition().x + " " + this.body.getPosition().y);
     }
 
     @Override
     public void render(SpriteBatch batch) {
+        System.err.println("Bomb: " + UnitHelper.snapMetersToGrid(this.body.getPosition().x) + " " + UnitHelper.snapMetersToGrid(this.body.getPosition().y));
         sprite.draw(batch);
             for (int i = 0; i < flames.size() - 1; i++) {
             flames.get(i).render(batch);

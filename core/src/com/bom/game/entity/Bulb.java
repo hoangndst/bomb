@@ -31,10 +31,11 @@ public class Bulb extends EnemyBase {
     private static FixtureDef fDef = new FixtureDef();
     private String playerPath = "bulb.atlas";
     private Sprite sprite;
-    
+    private Bomberman bomberman;
 
     public Bulb(GameScreen gameScreen, Ellipse ellipse) {
         super(gameScreen.entityCreator.entityManager);
+        this.bomberman = gameScreen.getBomberman();
         this.timeMove = 0f;
         this.timeRemove = 1f;
         this.enemyLive = 2;

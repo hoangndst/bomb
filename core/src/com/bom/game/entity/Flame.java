@@ -77,6 +77,7 @@ public class Flame extends EntityBase implements Disposable {
     }
 
     public void render(SpriteBatch batch) {
+        System.err.println("Flame: " + this.body.getPosition().x + " " + this.body.getPosition().y);
         sprite.draw(batch);
     }
 
