@@ -34,7 +34,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 	private static CircleShape cShape = new CircleShape();
 	private String playerPath = "bomb.atlas";
 	private Sprite sprite;
-	public float countDown = 1f;
+	public float countDown = 1.5f;
 	private float bodyDiameter = 0.95f;
 	public boolean sensorFlag = true;
 	private Bomberman bombOwner;
@@ -183,7 +183,7 @@ public class Bomb extends EntityBase implements Poolable, Disposable {
 	@Override
 	public void reset() {
 		this.sensorFlag = true;
-		this.countDown = 1f;
+		this.countDown = 1.5f;
 		world.destroyBody(body);
 		animationHandle.setCurrentAnimation(null);
 		sprite = new Sprite();

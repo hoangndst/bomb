@@ -14,16 +14,17 @@ import com.bom.game.modules.UnitHelper;
 
 public abstract class TileBase {
     
-    protected Body body;
+    public Body body;
     protected Fixture fixture;
-    protected Rectangle bounds;
+    public Rectangle bounds;
     public static TiledMapTileSet tileSet;
     public Type type = Type.NULL;
     protected float timeRemove = 1;
+    public GameScreen gameScreen;
 
     public TileBase(GameScreen screen, Rectangle bounds) {
         this.bounds = bounds;
-        
+        this.gameScreen = screen;
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
