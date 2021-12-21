@@ -10,6 +10,13 @@ public class NeBomb {
 
     private static ArrayList<Bomb> bombs = new ArrayList<Bomb>();
 
+    /**    y
+     *     y 
+     *     O x x x 
+     *     y
+     *     y
+     */
+
 
     // public static int getWay(Body body, Bomberman bomberman) {
     //     int way = 0;
