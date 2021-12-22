@@ -12,10 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Disposable;
 import com.bom.game.animation.AnimationHandle;
 import com.bom.game.manager.GameManager;
@@ -157,7 +157,8 @@ public class Bomberman extends EntityBase implements Disposable {
 
 	@Override
 	public void update(float deltaTime) {
-		// System.err.println(GameManager.getInstance().pathfinder.findNextNode(this.body.getPosition(), new Vector2(8, 3)));
+		// System.err.println(GameManager.getInstance().pathfinder.findNextNode(this.body.getPosition(),
+		// new Vector2(8, 3)));
 
 		GameManager.timeGhostMode -= deltaTime;
 		handleInput(deltaTime);
@@ -209,7 +210,6 @@ public class Bomberman extends EntityBase implements Disposable {
 	}
 
 	public void definePlayer(Vector2 position) {
-
 		bDef.type = BodyDef.BodyType.DynamicBody;
 		bDef.position.set(UnitHelper.coordScreenToBox2D(position.x, position.y,
 				bodyDiameter / 2));
@@ -265,8 +265,8 @@ public class Bomberman extends EntityBase implements Disposable {
 		return bombs;
 	}
 
-    public int getFlameLength() {
-        return flameLength;
-    }
+	public int getFlameLength() {
+		return flameLength;
+	}
 
 }
