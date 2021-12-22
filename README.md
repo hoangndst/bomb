@@ -22,16 +22,17 @@
   <ol>
     <li>
       <a href="#introduction">Introduction</a>
+       <ul>
+        <li><a href="#bomberman">Bomberman</a></li>
+        <li><a href="#bomb">Bomb</a></li>
+        <li><a href="#balloom">Balloom</a></li>
+        <li><a href="#bulb">Bulb</a></li>
+      </ul>
     </li>
     <li>
       <a href="#game-play">Game Play</a>
-      <ul>
-        <li><a href="#translate-word">Translate Word</a></li>
-        <li><a href="#translate-sentence">Translate Sentence</a></li>
-        <li><a href="#bookmark">Bookmark</a></li>
-      </ul>
     </li>
-    <li><a href="#translate-api">Translate API</a></li>
+    <li><a href="#how-to-play">How to play</a></li>
     <li><a href="#database">Database</a></li>
     <li><a href="#libraries">Libraries</a></li>
     <li><a href="#license">License</a></li>
