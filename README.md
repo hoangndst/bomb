@@ -44,23 +44,23 @@
 Bomberman is a legendary game that has been around for a long time. It is a game where you control a character called a Bomberman and you must destroy all the bombs that are scattered around the map. The bombs are scattered around the map and you must destroy them in order to win the game.
 
 ### Bomberman
-![Bomberman](core\assets\bomberman.png)
+![Bomberman](core/assets/bomberman.png)
 
 Bomberman is a character that you control. You can move it around the map and you can use the bombs to destroy all the bombs that are scattered around the map.
 ### Bomb
-![Bomb](core\assets\bomb.png)
+![Bomb](core/assets/bomb.png)
 
-![Flame](core\assets\flame.png)
+![Flame](core/assets/flame.png)
 
 - Bomb is a special item that you can use to destroy all the bombs that are scattered around the map.
 
 ### Balloom
-![Balloon](core\assets\balloom.png)
+![Balloon](core/assets/balloom.png)
 
 - Balloom is an enemy that you can destroy to win the game. They move with random direction and they are destroyed by the bombs.
 
 ### Bulb
-![Bulb](core\assets\bulb.png)
+![Bulb](core/assets/bulb.png)
 
 - Bulb is an enemy that you can destroy to win the game. They can find the shortest path to the Bomberman and they are destroyed by the bombs.
 - The find path algorithm is A* algorithm.
@@ -77,8 +77,8 @@ Bomberman is a character that you control. You can move it around the map and yo
 
 ## Game play
 
-![GUI Demo](core\assets\img\map1.png)
-![GUI Demo](core\assets\img\map2.png)
+![GUI Demo](core/assets/img/map1.png)
+![GUI Demo](core/assets/img/map2.png)
 
 
 ## Libraries
