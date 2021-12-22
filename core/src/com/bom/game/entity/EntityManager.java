@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.bom.game.ai.AStarMap;
+import com.bom.game.ai.AStartPathFinding;
 import com.bom.game.manager.GameManager;
 import com.bom.game.modules.UnitHelper;
 
@@ -16,6 +18,7 @@ public class EntityManager {
 	private ArrayList<TileBase> items;
     public ArrayList<ArrayList<Integer>> map = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> initMap = new ArrayList<>();
+    public static AStarMap aStarMap;
 
 	public EntityManager() {
         for (int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
@@ -31,6 +34,7 @@ public class EntityManager {
 		entities = new ArrayList<>();
 		enemies = new ArrayList<>();
 		items = new ArrayList<>();
+        aStarMap = new AStarMap(GameManager.mapWidth, GameManager.mapHeight);
 	}
 
 	public void addWall(Wall wall) {
@@ -63,14 +67,24 @@ public class EntityManager {
 	}
 
 	public void update(float delta) {
-        updateMap();
-        for(int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
-            for(int j = 0; j < GameManager.WIDTH / GameManager.PPM; j++) {
-                System.err.print(map.get(i).get(j) + " ");
-            }
-            System.err.println();
-        }
-        System.err.println("/");
+        // updateMap();
+        updateAStarMap();
+        // test();
+        // for (EnemyBase enemy : enemies) {
+        //     Bulb bulb = (Bulb) enemy;
+        //     GameManager.getInstance().pathfinder = new AStartPathFinding(aStarMap);
+        //     // System.err.println(bulb.body.getPosition().x + " " + bulb.body.getPosition().y);
+        //     System.err.println(GameManager.getInstance()
+        //     .pathfinder.findNextNode(bulb.body.getPosition(), new Vector2(8, 8)));
+        // }
+
+        // for(int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
+        //     for(int j = 0; j < GameManager.WIDTH / GameManager.PPM; j++) {
+        //         System.err.print(map.get(i).get(j) + " ");
+        //     }
+        //     System.err.println();
+        // }
+        // System.err.println("/");
 		EnemyBase temp = null;
 		for (EnemyBase enemy : enemies) {
 			if (enemy.canDestroy && !enemy.isDead && enemy.timeRemove <= 0) {
@@ -118,9 +132,10 @@ public class EntityManager {
                 }
             }
         }
+        updateAStarMap();
     }
 
-    public void importWall() {
+    public void createMapArray() {
         for (int i = 0; i < this.walls.size(); i++) {
             float x = this.walls.get(i).body.getPosition().x;
             float y = this.walls.get(i).body.getPosition().y;
@@ -150,8 +165,18 @@ public class EntityManager {
             int x = UnitHelper.snapMetersToGrid(this.bricks.get(i).body.getPosition().x);
             int y = UnitHelper.snapMetersToGrid(this.bricks.get(i).body.getPosition().y);
             y = (int) (GameManager.HEIGHT / GameManager.PPM) - y - 1;
-            map.get(y).set(x, 2);
+            map.get(y).set(x, 1);
         }
+
+        // create A* map
+        for (int i = 0; i < GameManager.mapHeight; i++) {
+            for (int j = 0; j < GameManager.mapWidth; j++) {
+               if (map.get(i).get(j) != 0) {
+                   aStarMap.getNodeAt(j, i).isWall = true;
+               }
+            }
+        }
+        GameManager.getInstance().pathfinder = new AStartPathFinding(aStarMap);
     }
 
     public void setInitMap() {
@@ -166,6 +191,29 @@ public class EntityManager {
                 }
             }
         }
+    }
+
+    private void updateAStarMap() {
+        aStarMap = new AStarMap(GameManager.mapWidth, GameManager.mapHeight);
+        for (int i = 0; i < GameManager.mapHeight; i++) {
+            for (int j = 0; j < GameManager.mapWidth; j++) {
+                if (map.get(i).get(j) != 0) {
+                    aStarMap.getNodeAt(j,GameManager.mapHeight - 1 - i).isWall = true;
+                }
+            }
+        }
+        GameManager.getInstance().pathfinder = new AStartPathFinding(aStarMap);
+    }
+
+
+    public void test() {
+        for (int i = 0; i < aStarMap.getHeight(); i++) {
+            for (int j = 0; j < aStarMap.getWidth(); j++) {
+                System.err.print(aStarMap.getNodeAt(j, i).isWall ? "1 " : "0 ");
+            }
+            System.err.println();
+        }
+        System.err.println("/");
     }
 
 }

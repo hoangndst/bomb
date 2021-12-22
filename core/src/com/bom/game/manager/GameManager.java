@@ -5,18 +5,21 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
+import com.bom.game.ai.AStartPathFinding;
 
 public class GameManager implements Disposable {
 
     private static final GameManager instance = new GameManager();
 
-    public static boolean audioEnabled = true;
+    public static boolean audioEnabled = false;
 
     public static final String TITLE = "Bomberman";
     public static final float PPM = 16;
     public static final float PPT = 16;
     public static final float WIDTH = 17 * PPM;
     public static final float HEIGHT = 13 * PPM;
+    public static int mapWidth = (int) (WIDTH / PPM);
+    public static int mapHeight = (int) (HEIGHT / PPM);
 
     private AssetManager assetManager;
 
@@ -29,6 +32,8 @@ public class GameManager implements Disposable {
     public static float timeGhostMode = 3f;
 
     private String currentMusic = "";
+
+    public AStartPathFinding pathfinder;
 
     private GameManager() {
         assetManager = new AssetManager();

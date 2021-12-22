@@ -13,7 +13,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.bom.game.ai.Node;
 import com.bom.game.animation.AnimationHandle;
+import com.bom.game.manager.GameManager;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.modules.Hud;
 import com.bom.game.modules.UnitHelper;
@@ -31,12 +33,14 @@ public class Bulb extends EnemyBase {
 	private static FixtureDef fDef = new FixtureDef();
 	private String playerPath = "bulb.atlas";
 	private Sprite sprite;
+	private GameScreen gameScreen;
 
 	public Bulb(GameScreen gameScreen, Ellipse ellipse) {
 		super(gameScreen.entityCreator.entityManager);
+		this.gameScreen = gameScreen;
 		this.timeMove = 0f;
 		this.timeRemove = 1f;
-		this.enemyLive = 2;
+		this.enemyLive = 1;
 		this.canDestroy = false;
 		this.world = gameScreen.getWorld();
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(playerPath));
@@ -63,7 +67,7 @@ public class Bulb extends EnemyBase {
 		fDef.filter.categoryBits = BitCollision.ENEMY;
 		fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL,
 				BitCollision.BRICK, BitCollision.BOMB, BitCollision.FLAME,
-				BitCollision.BOMBERMAN, BitCollision.ENEMY);
+				BitCollision.BOMBERMAN);
 		fDef.shape = shape;
 		// fdef.isSensor = true;
 		body.createFixture(fDef).setUserData(this);
@@ -74,24 +78,45 @@ public class Bulb extends EnemyBase {
 	}
 
 	private void randomMove(float delta) {
-		timeMove -= delta;
-		if (timeMove <= 0) {
-			int random = getRandomNumber(1, 5);
-			switch (random) {
-				case 1 :
-					body.setLinearVelocity(new Vector2(speed, 0));
-					break;
-				case 2 :
-					body.setLinearVelocity(new Vector2(-speed, 0));
-					break;
-				case 3 :
-					body.setLinearVelocity(new Vector2(0, speed));
-					break;
-				case 4 :
-					body.setLinearVelocity(new Vector2(0, -speed));
-					break;
+		Node node = GameManager.getInstance().pathfinder
+		.findNextNode(this.body.getPosition(), gameScreen.bomberman.body.getPosition());
+		System.err.println(node);
+		if (node != null) {
+			System.err.println("Body: " + this.body.getPosition().x + " "
+					+ this.body.getPosition().y);
+			float xSource = this.body.getPosition().x;
+			float ySource = this.body.getPosition().y;
+			float xTarget = node.x + 0.5f;
+			float yTarget = node.y + 0.5f;
+			if (xSource < xTarget && Math.abs(ySource - yTarget) < 0.2f) {
+				body.setLinearVelocity(new Vector2(speed, 0));
+			} else if (xSource > xTarget && Math.abs(ySource - yTarget) < 0.2f) {
+				body.setLinearVelocity(new Vector2(-speed, 0));
+			}else if (ySource < yTarget && Math.abs(xSource - xTarget) < 0.2f) {
+				body.setLinearVelocity(new Vector2(0, speed));
+			} else if (ySource > yTarget && Math.abs(xSource - xTarget) < 0.2f) {
+				body.setLinearVelocity(new Vector2(0, -speed));
 			}
-			timeMove = 3f;
+		} else {
+			timeMove -= delta;
+			if (timeMove <= 0) {
+				int random = getRandomNumber(1, 5);
+				switch (random) {
+					case 1 :
+						body.setLinearVelocity(new Vector2(speed, 0));
+						break;
+					case 2 :
+						body.setLinearVelocity(new Vector2(-speed, 0));
+						break;
+					case 3 :
+						body.setLinearVelocity(new Vector2(0, speed));
+						break;
+					case 4 :
+						body.setLinearVelocity(new Vector2(0, -speed));
+						break;
+				}
+				timeMove = 3f;
+			}
 		}
 	}
 

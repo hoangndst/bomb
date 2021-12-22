@@ -80,20 +80,18 @@ public class WorldContactListener implements ContactListener {
 			} else if (fixB.getFilterData().categoryBits == BitCollision.BOMB) {
 				Bomb bomb = (Bomb) fixB.getUserData();
 				bomb.canMove = false;
-			} else if (fixA
-					.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
-				GameManager.getInstance().playSound("Die.ogg");
+			} else if (fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
 				EntityBase entity = (EntityBase) fixA.getUserData();
 				Bomberman bomberman = (Bomberman) entity;
 				if (GameManager.timeGhostMode <= 0) {
+					GameManager.getInstance().playSound("Die.ogg");
 					bomberman.canDestroy = true;
 				}
-			} else if (fixB
-					.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
-				GameManager.getInstance().playSound("Die.ogg");
+			} else if (fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
 				EntityBase entity = (EntityBase) fixB.getUserData();
 				Bomberman bomberman = (Bomberman) entity;
 				if (GameManager.timeGhostMode <= 0) {
+					GameManager.getInstance().playSound("Die.ogg");
 					bomberman.canDestroy = true;
 				}
 			}
@@ -168,7 +166,26 @@ public class WorldContactListener implements ContactListener {
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
 		// TODO Auto-generated method stub
-
+		Fixture fixA = contact.getFixtureA();
+		Fixture fixB = contact.getFixtureB();
+		if (fixA.getFilterData().categoryBits == BitCollision.ENEMY
+				|| fixB.getFilterData().categoryBits == BitCollision.ENEMY) {
+			if (fixA.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
+				EntityBase entity = (EntityBase) fixA.getUserData();
+				Bomberman bomberman = (Bomberman) entity;
+				if (GameManager.timeGhostMode <= 0) {
+					GameManager.getInstance().playSound("Die.ogg");
+					bomberman.canDestroy = true;
+				}
+			} else if (fixB.getFilterData().categoryBits == BitCollision.BOMBERMAN) {
+				EntityBase entity = (EntityBase) fixB.getUserData();
+				Bomberman bomberman = (Bomberman) entity;
+				if (GameManager.timeGhostMode <= 0) {
+					GameManager.getInstance().playSound("Die.ogg");
+					bomberman.canDestroy = true;
+				}
+			}
+		}
 	}
 
 	@Override
