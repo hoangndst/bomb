@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bom.game.BomGame;
 import com.bom.game.manager.GameManager;
 
-public class MenuScreen implements Screen {
+public class SelectScreen implements Screen {
 
 	private BomGame game;
 	private SpriteBatch batch;
@@ -40,8 +40,7 @@ public class MenuScreen implements Screen {
 	private int currentSelection;
 	private boolean selected;
 
-	public MenuScreen(BomGame game) {
-		GameManager.getInstance().reset();
+	public SelectScreen(BomGame game) {
 		this.game = game;
 		this.batch = game.getSpriteBatch();
 	}
@@ -52,17 +51,13 @@ public class MenuScreen implements Screen {
 		stage = new Stage(viewport, batch);
 		font = new BitmapFont(Gdx.files.internal("fonts/foo.fnt"));
 		Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
-		Label titleLabel = new Label("Bomberman", labelStyle);
+		Label titleLabel = new Label("Select Level", labelStyle);
 		titleLabel.setFontScale(1.5f);
 		titleLabel.setPosition(160, 340);
-		Label newGameLabel = new Label("New Game", labelStyle);
-		newGameLabel.setPosition((640 - newGameLabel.getWidth()) / 2, 240);
-		musicLabel = new Label(
-				GameManager.audioEnabled ? "Music: ON" : "Music: OFF",
-				labelStyle);
-		musicLabel.setPosition((640 - newGameLabel.getWidth()) / 2, 180);
-		Label ExitLabel = new Label("Exit", labelStyle);
-		ExitLabel.setPosition((640 - ExitLabel.getWidth()) / 2, 120);
+		Label level1Label = new Label("Level 1-1", labelStyle);
+		level1Label.setPosition((640 - level1Label.getWidth()) / 2, 220);
+		Label level2Label = new Label("Level 1-2", labelStyle);
+		level2Label.setPosition((640 - level2Label.getWidth()) / 2, 160);
 		Pixmap pixmap = new Pixmap(640, 490, Pixmap.Format.RGB888);
 		pixmap.setColor(102 / 255.0f, 153 / 255.0f, 0 / 255.0f, 0);
 		pixmap.fill();
@@ -71,7 +66,7 @@ public class MenuScreen implements Screen {
 		Image background = new Image(backgroundTexture);
 
 		positionX = 120;
-		positionY = 240;
+		positionY = 220;
 
 		TextureAtlas textureAtlas = GameManager.getInstance().getAssetManager()
 				.get("img/actors.pack", TextureAtlas.class);
@@ -87,9 +82,8 @@ public class MenuScreen implements Screen {
 
 		stage.addActor(background);
 		stage.addActor(titleLabel);
-		stage.addActor(newGameLabel);
-		stage.addActor(musicLabel);
-		stage.addActor(ExitLabel);
+		stage.addActor(level1Label);
+		stage.addActor(level2Label);
 		stage.addActor(indicator0);
 		stage.addActor(indicator1);
 
@@ -106,7 +100,7 @@ public class MenuScreen implements Screen {
 			GameManager.getInstance().playSound("Pickup.ogg");
 			currentSelection--;
 			if (currentSelection < 0) {
-				currentSelection += 3;
+				currentSelection += 2;
 			}
 
 			float newIndicatorY = positionY - currentSelection * 60f;
@@ -124,8 +118,8 @@ public class MenuScreen implements Screen {
 			indicator1.setVisible(false);
 			GameManager.getInstance().playSound("Pickup.ogg");
 			currentSelection++;
-			if (currentSelection >= 3) {
-				currentSelection -= 3;
+			if (currentSelection >= 2) {
+				currentSelection -= 2;
 			}
 			float newIndicatorY = positionY - currentSelection * 60f;
 			MoveToAction moveToAction = new MoveToAction();
@@ -140,37 +134,24 @@ public class MenuScreen implements Screen {
 			GameManager.getInstance().playSound("Teleport.ogg");
 			indicator0.setVisible(false);
 			indicator1.setVisible(true);
-			if (currentSelection == 1) {
-				if (GameManager.audioEnabled == true) {
-					GameManager.audioEnabled = false;
-					GameManager.getInstance().stopMusic();
-					musicLabel.setText("Music: OFF");
-				} else {
-					GameManager.audioEnabled = true;
-					GameManager.getInstance()
-							.playMusic("SuperBomberman-Title.ogg", true);
-					musicLabel.setText("Music: ON");
-				}
-			} else {
-				selected = true;
-				RunnableAction runnableAction = new RunnableAction();
-				runnableAction.setRunnable(new Runnable() {
-					@Override
-					public void run() {
-						switch (currentSelection) {
-							case 2 :
-								Gdx.app.exit();
-								break;
-							case 0 :
-							default :
-								game.setScreen(new SelectScreen(game));
-								break;
-						}
+			selected = true;
+			RunnableAction runnableAction = new RunnableAction();
+			runnableAction.setRunnable(new Runnable() {
+				@Override
+				public void run() {
+					switch (currentSelection) {
+						case 1 :
+							game.setScreen(new GameScreen(game, 2));
+							break;
+						case 0 :
+						default :
+							game.setScreen(new GameScreen(game, 1));
+							break;
 					}
-				});
-				stage.addAction(new SequenceAction(Actions.delay(0.2f),
-						Actions.fadeOut(1f), runnableAction));
-			}
+				}
+			});
+			stage.addAction(new SequenceAction(Actions.delay(0.2f),
+					Actions.fadeOut(1f), runnableAction));
 		}
 	}
 
