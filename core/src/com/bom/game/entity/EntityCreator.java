@@ -19,20 +19,12 @@ public class EntityCreator {
     
     private GameScreen gameScreen;
     public EntityManager entityManager;
-    private static BodyDef bDef;
-    private static PolygonShape pShape;
-    private static FixtureDef fDef;
-    private Body body;
 
     public EntityCreator(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
     }
     
     public void createEntity() {
-
-        bDef = new BodyDef();
-        pShape = new PolygonShape();
-        fDef = new FixtureDef();
         
         entityManager = new EntityManager();
 
@@ -45,6 +37,9 @@ public class EntityCreator {
         createKey();
         createPortal();
         createBulbObjects();
+        
+        entityManager.importWall();
+        entityManager.setInitMap();
     }
     
     
