@@ -65,7 +65,6 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / GameManager.PPM);
 		entityCreator = new EntityCreator(this);
 		entityCreator.createEntity();
-        entityCreator.entityManager.importWall();
 		bombPool = new BombPool();
 		bomberman = new Bomberman(this, new Vector2(8, 8));
 		world.setContactListener(new WorldContactListener());

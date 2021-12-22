@@ -15,6 +15,7 @@ public class EntityManager {
 	private ArrayList<EnemyBase> enemies;
 	private ArrayList<TileBase> items;
     public ArrayList<ArrayList<Integer>> map = new ArrayList<>();
+    private ArrayList<ArrayList<Integer>> initMap = new ArrayList<>();
 
 	public EntityManager() {
         for (int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
@@ -62,24 +63,13 @@ public class EntityManager {
 	}
 
 	public void update(float delta) {
-        // updateMap();
+        updateMap();
         for(int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
             for(int j = 0; j < GameManager.WIDTH / GameManager.PPM; j++) {
                 System.err.print(map.get(i).get(j) + " ");
             }
             System.err.println();
         }
-        // for (Wall wall : walls) {
-        //     System.out.println(wall.body.getPosition().x + " " + wall.body.getPosition().y);
-        //     System.err.println(UnitHelper.snapMetersToGrid(wall.body.getPosition().x) + " " + UnitHelper.snapMetersToGrid(wall.body.getPosition().y));
-        //     // System.out.println(wall.bounds.getWidth() + " " + wall.bounds.getHeight());
-        //     System.err.println();
-        // }
-        // for (Brick brick : bricks) {
-        //     System.out.println(brick.body.getPosition().x + " " + brick.body.getPosition().y);
-        //     System.err.println(UnitHelper.snapMetersToGrid(brick.body.getPosition().x) + " " + UnitHelper.snapMetersToGrid(brick.body.getPosition().y));
-        // }
-
         System.err.println("/");
 		EnemyBase temp = null;
 		for (EnemyBase enemy : enemies) {
@@ -113,12 +103,22 @@ public class EntityManager {
 	}
 
 
-    // public void updateMap() {
-
-    //     // x: 1 y: 6 -> w: 1 h: 12
-
-        
-    // }
+    public void updateMap() {
+        removeCurrentEntityPosition();
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).enemyLive == 1) {
+                Balloom balloom = (Balloom) enemies.get(i);
+                int x = UnitHelper.snapMetersToGrid(balloom.body.getPosition().x);
+                int y = (int) (GameManager.HEIGHT / GameManager.PPM) - 1 - UnitHelper.snapMetersToGrid(balloom.body.getPosition().y);
+                System.err.println(x + " " + y);
+                if (balloom.canDestroy) {
+                    map.get(y).set(x, 0);
+                } else {
+                    map.get(y).set(x, 3);
+                }
+            }
+        }
+    }
 
     public void importWall() {
         for (int i = 0; i < this.walls.size(); i++) {
@@ -150,9 +150,22 @@ public class EntityManager {
             int x = UnitHelper.snapMetersToGrid(this.bricks.get(i).body.getPosition().x);
             int y = UnitHelper.snapMetersToGrid(this.bricks.get(i).body.getPosition().y);
             y = (int) (GameManager.HEIGHT / GameManager.PPM) - y - 1;
-            map.get(y).set(x, 1);
+            map.get(y).set(x, 2);
         }
     }
 
+    public void setInitMap() {
+        this.initMap = this.map;
+    }
+
+    private void removeCurrentEntityPosition() {
+        for (int i = 0; i < map.size(); i++) {
+            for (int j = 0; j < map.get(i).size(); j++) {
+                if (map.get(i).get(j) == 3) {
+                    map.get(i).set(j, 0);
+                }
+            }
+        }
+    }
 
 }
