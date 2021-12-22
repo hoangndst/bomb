@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
 	private Viewport viewport;
 	private BomGame bomGame;
 	public final EntityCreator entityCreator;
-	private Bomberman bomberman;
+	public Bomberman bomberman;
 	private BombPool bombPool;
 	private ArrayList<EntityBase> entities = new ArrayList<EntityBase>();
 	private boolean paused = false;

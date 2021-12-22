@@ -71,7 +71,7 @@ public class Balloom extends EnemyBase {
 		fDef.filter.categoryBits = BitCollision.ENEMY;
 		fDef.filter.maskBits = BitCollision.orOperation(BitCollision.WALL,
 				BitCollision.BRICK, BitCollision.BOMB, BitCollision.FLAME,
-				BitCollision.BOMBERMAN, BitCollision.ENEMY);
+				BitCollision.BOMBERMAN);
 		fDef.shape = shape;
 		// fdef.isSensor = true;
 		body.createFixture(fDef).setUserData(this);

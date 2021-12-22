@@ -1,17 +1,10 @@
 package com.bom.game.entity;
 
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.bom.game.modules.Paths;
 import com.bom.game.screen.GameScreen;
 
@@ -38,7 +31,7 @@ public class EntityCreator {
         createPortal();
         createBulbObjects();
         
-        entityManager.importWall();
+        entityManager.createMapArray();
         entityManager.setInitMap();
     }
     

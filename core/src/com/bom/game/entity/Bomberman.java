@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Disposable;
 import com.bom.game.animation.AnimationHandle;
 import com.bom.game.manager.GameManager;
@@ -156,6 +157,8 @@ public class Bomberman extends EntityBase implements Disposable {
 
 	@Override
 	public void update(float deltaTime) {
+		// System.err.println(GameManager.getInstance().pathfinder.findNextNode(this.body.getPosition(), new Vector2(8, 3)));
+
 		GameManager.timeGhostMode -= deltaTime;
 		handleInput(deltaTime);
 		checkExplode(deltaTime);
@@ -175,6 +178,7 @@ public class Bomberman extends EntityBase implements Disposable {
 		}
 		if (canDestroy) {
 			time -= deltaTime;
+			this.body.setType(BodyType.StaticBody);
 			animationHandle.setCurrentAnimation(State.DEAD.getValue());
 			dead();
 		}
