@@ -91,18 +91,21 @@ public class EntityManager {
 		// System.err.println();
 		// }
 		// System.err.println("/");
-		EnemyBase temp = null;
+		ArrayList<EnemyBase> removeEnemies = new ArrayList<>();
 		for (EnemyBase enemy : enemies) {
 			if (enemy.canDestroy && !enemy.isDead && enemy.timeRemove <= 0) {
 				enemy.dead();
-				temp = enemy;
+				removeEnemies.add(enemy);
 			} else {
 				enemy.update(delta);
 			}
 
 		}
-		if (temp != null) {
-			this.enemies.remove(temp);
+        System.err.println(removeEnemies.size());
+		if (removeEnemies.size() > 0) {
+            for (EnemyBase enemy : removeEnemies) {
+                enemies.remove(enemy);
+            }
 		}
 	}
 
