@@ -19,7 +19,7 @@ public class EntityCreator {
     
     public void createEntity() {
         
-        entityManager = new EntityManager();
+        entityManager = new EntityManager(gameScreen);
 
         createWallObjects();
         createBrickObjects();
