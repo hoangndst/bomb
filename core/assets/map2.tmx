@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="17" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="197">
+ <tileset firstgid="1" source="tileset_all.tsx"/>
+ <tileset firstgid="2882" name="item" tilewidth="15" tileheight="15" spacing="1" margin="1" tilecount="315" columns="15">
+  <image source="item.png" width="250" height="348"/>
+ </tileset>
+ <layer id="7" name="floor" width="17" height="13">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,3,3,3,3,3,2,2,2,3,3,3,3,3,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,3,2,3,2,3,2,3,2,3,2,3,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,3,2,3,2,3,2,3,2,3,2,3,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,3,3,2,3,2,3,2,3,2,3,2,3,3,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+</data>
+ </layer>
+ <layer id="9" name="item" width="17" height="13">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,476,0,0,0,0,0,0,0,0,0,0,0,2883,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,2884,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,2882,0,0,0,0,0,2882,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,2883,0,0,0,0,0,0,0,0,2884,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="1" name="background" width="17" height="13">
+  <data encoding="csv">
+73,74,76,76,76,76,76,11,12,13,2147483724,2147483724,2147483724,2147483724,2147483724,2147483722,2147483721,
+140,141,142,142,143,76,2147483791,78,79,80,143,2147483724,2147483791,2147483790,2147483790,2147483789,2147483788,
+207,208,477,4,210,75,2147483858,145,146,147,210,2147483723,2147483858,4,4,2147483856,2147483855,
+274,208,1,4,204,2147483790,2147483852,212,213,214,204,142,2147483852,4,1,2147483856,2147483922,
+76,208,0,0,0,0,0,0,0,0,0,0,0,0,0,2147483856,2147483724,
+76,136,340,340,340,340,340,340,338,340,2147483988,2147483988,2147483988,2147483988,2147483988,2147483784,2147483724,
+76,336,211,1,4,1,4,1,0,1,4,1,4,1,2147483859,2147483984,2147483724,
+203,403,269,0,0,4,0,4,0,4,0,4,0,0,2147483917,2147484051,2147483851,
+270,138,269,1,4,1,0,1,0,1,0,1,4,1,2147483917,2147483786,2147483918,
+203,76,269,4,0,4,0,4,0,4,0,4,0,4,2147483917,2147483724,2147483851,
+270,137,341,1,0,1,0,1,0,1,0,1,0,1,2147483989,2147483785,2147483918,
+6,408,4,4,0,4,0,4,0,4,0,4,0,4,4,2147484056,2147483654,
+73,74,279,277,279,277,279,277,279,277,279,277,279,277,279,2147483722,2147483721
+</data>
+ </layer>
+ <objectgroup id="5" name="wall">
+  <object id="154" x="112" y="0" width="16" height="64"/>
+  <object id="155" x="144" y="0" width="16" height="64"/>
+  <object id="156" x="160" y="48" width="48" height="16"/>
+  <object id="157" x="192" y="16" width="16" height="32"/>
+  <object id="158" x="208" y="16" width="48" height="16"/>
+  <object id="159" x="240" y="32" width="16" height="176"/>
+  <object id="160" x="224" y="80" width="16" height="96"/>
+  <object id="161" x="0" y="192" width="240" height="16"/>
+  <object id="162" x="16" y="16" width="16" height="176"/>
+  <object id="163" x="32" y="80" width="16" height="96"/>
+  <object id="164" x="48" y="80" width="80" height="16"/>
+  <object id="165" x="144" y="80" width="80" height="16"/>
+  <object id="166" x="64" y="48" width="48" height="16"/>
+  <object id="168" x="64" y="16" width="16" height="32"/>
+  <object id="169" x="32" y="16" width="32" height="16"/>
+  <object id="170" x="128" y="0" width="16" height="32"/>
+  <object id="171" x="48" y="96" width="16" height="16"/>
+  <object id="172" x="80" y="96" width="16" height="16"/>
+  <object id="173" x="112" y="96" width="16" height="16"/>
+  <object id="174" x="144" y="96" width="16" height="16"/>
+  <object id="175" x="176" y="96" width="16" height="16"/>
+  <object id="176" x="208" y="96" width="16" height="16"/>
+  <object id="177" x="208" y="128" width="16" height="16"/>
+  <object id="178" x="176" y="128" width="16" height="16"/>
+  <object id="179" x="144" y="128" width="16" height="16"/>
+  <object id="180" x="112" y="128" width="16" height="16"/>
+  <object id="181" x="80" y="128" width="16" height="16"/>
+  <object id="182" x="48" y="128" width="16" height="16"/>
+  <object id="183" x="48" y="160" width="16" height="16"/>
+  <object id="184" x="80" y="160" width="16" height="16"/>
+  <object id="185" x="112" y="160" width="16" height="16"/>
+  <object id="186" x="144" y="160" width="16" height="16"/>
+  <object id="187" x="176" y="160" width="16" height="16"/>
+  <object id="188" x="208" y="160" width="16" height="16"/>
+  <object id="189" x="224" y="48" width="16" height="16"/>
+  <object id="190" x="32" y="48" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="11" name="item_flame_up">
+  <object id="120" x="32.25" y="177.25" width="13.75" height="13.625"/>
+  <object id="121" x="224.5" y="33.25" width="13.25" height="13.5"/>
+ </objectgroup>
+ <objectgroup id="12" name="item_bomb_up">
+  <object id="118" x="80.625" y="145.5" width="13.375" height="13.625"/>
+  <object id="119" x="176.375" y="145.5" width="13.75" height="13.375"/>
+ </objectgroup>
+ <objectgroup id="10" name="item_speed_up">
+  <object id="122" x="192.125" y="97.25" width="14" height="14"/>
+  <object id="123" x="176.375" y="177.625" width="13.25" height="12.375"/>
+ </objectgroup>
+ <objectgroup id="13" name="key">
+  <object id="116" x="32" y="32" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="14" name="portal">
+  <object id="117" x="128" y="48" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="6" name="brick">
+  <object id="124" x="48" y="32" width="16" height="16"/>
+  <object id="125" x="48" y="48" width="16" height="16"/>
+  <object id="126" x="32" y="32" width="16" height="16"/>
+  <object id="127" x="208" y="32" width="16" height="16"/>
+  <object id="128" x="224" y="32" width="16" height="16"/>
+  <object id="129" x="208" y="48" width="16" height="16"/>
+  <object id="130" x="224" y="176" width="16" height="16"/>
+  <object id="131" x="208" y="176" width="16" height="16"/>
+  <object id="132" x="208" y="144" width="16" height="16"/>
+  <object id="133" x="192" y="128" width="16" height="16"/>
+  <object id="134" x="176" y="144" width="16" height="16"/>
+  <object id="135" x="176" y="112" width="16" height="16"/>
+  <object id="136" x="192" y="96" width="16" height="16"/>
+  <object id="137" x="160" y="96" width="16" height="16"/>
+  <object id="138" x="144" y="112" width="16" height="16"/>
+  <object id="139" x="144" y="144" width="16" height="16"/>
+  <object id="140" x="176" y="176" width="16" height="16"/>
+  <object id="141" x="144" y="176" width="16" height="16"/>
+  <object id="142" x="112" y="176" width="16" height="16"/>
+  <object id="143" x="112" y="144" width="16" height="16"/>
+  <object id="144" x="112" y="112" width="16" height="16"/>
+  <object id="145" x="96" y="96" width="16" height="16"/>
+  <object id="146" x="80" y="112" width="16" height="16"/>
+  <object id="147" x="64" y="96" width="16" height="16"/>
+  <object id="148" x="64" y="128" width="16" height="16"/>
+  <object id="149" x="80" y="144" width="16" height="16"/>
+  <object id="150" x="48" y="144" width="16" height="16"/>
+  <object id="151" x="80" y="176" width="16" height="16"/>
+  <object id="152" x="48" y="176" width="16" height="16"/>
+  <object id="153" x="32" y="176" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="8" name="balloom">
+  <object id="193" x="49.8485" y="66.8788" width="12" height="12.3333">
+   <ellipse/>
+  </object>
+  <object id="194" x="178.182" y="66" width="12.1818" height="11.8182">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup id="15" name="bulb">
+  <object id="195" x="194.182" y="162" width="12.1818" height="11.8182">
+   <ellipse/>
+  </object>
+  <object id="196" x="50.3636" y="113.818" width="11.2727" height="11.8182">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>

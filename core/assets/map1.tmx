@@ -148,22 +148,7 @@
   </object>
  </objectgroup>
  <objectgroup id="15" name="bulb">
-  <object id="110" x="177.667" y="81.2727" width="12.6667" height="12.6667">
-   <ellipse/>
-  </object>
-  <object id="111" x="130.212" y="112.394" width="12.6667" height="12.6667">
-   <ellipse/>
-  </object>
-  <object id="112" x="129.667" y="177.121" width="12.6667" height="12.6667">
-   <ellipse/>
-  </object>
   <object id="113" x="130.25" y="145.75" width="13" height="12.25">
-   <ellipse/>
-  </object>
-  <object id="114" x="80.5" y="178.5" width="12" height="13.5">
-   <ellipse/>
-  </object>
-  <object id="115" x="99.25" y="49.75" width="11" height="11.75">
    <ellipse/>
   </object>
  </objectgroup>

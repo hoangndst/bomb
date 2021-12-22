@@ -8,6 +8,7 @@ import com.bom.game.ai.AStarMap;
 import com.bom.game.ai.AStartPathFinding;
 import com.bom.game.manager.GameManager;
 import com.bom.game.modules.UnitHelper;
+import com.bom.game.screen.GameScreen;
 
 public class EntityManager {
 
@@ -18,9 +19,11 @@ public class EntityManager {
 	private ArrayList<TileBase> items;
     public ArrayList<ArrayList<Integer>> map = new ArrayList<>();
     private ArrayList<ArrayList<Integer>> initMap = new ArrayList<>();
+    private GameScreen gameScreen;
     public static AStarMap aStarMap;
 
-	public EntityManager() {
+	public EntityManager(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
         for (int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
             ArrayList<Integer> row = new ArrayList<>();
             map.add(row);
@@ -202,6 +205,12 @@ public class EntityManager {
                 }
             }
         }
+        ArrayList<Bomb> bombs = gameScreen.bomberman.getBombs();
+        for (int i = 0; i < bombs.size(); i++) {
+            int x = UnitHelper.snapMetersToGrid(bombs.get(i).body.getPosition().x);
+            int y = UnitHelper.snapMetersToGrid(bombs.get(i).body.getPosition().y);
+            aStarMap.getNodeAt(x, y).isWall = true;
+        }
         GameManager.getInstance().pathfinder = new AStartPathFinding(aStarMap);
     }
 
@@ -209,7 +218,8 @@ public class EntityManager {
     public void test() {
         for (int i = 0; i < aStarMap.getHeight(); i++) {
             for (int j = 0; j < aStarMap.getWidth(); j++) {
-                System.err.print(aStarMap.getNodeAt(j, i).isWall ? "1 " : "0 ");
+                int y = GameManager.mapHeight - 1 - i;
+                System.err.print(aStarMap.getNodeAt(j, y).isWall ? "1 " : "0 ");
             }
             System.err.println();
         }
