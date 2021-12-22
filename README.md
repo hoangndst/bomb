@@ -33,7 +33,6 @@
       <a href="#game-play">Game Play</a>
     </li>
     <li><a href="#how-to-play">How to play</a></li>
-    <li><a href="#database">Database</a></li>
     <li><a href="#libraries">Libraries</a></li>
     <li><a href="#license">License</a></li>
   </ol>
