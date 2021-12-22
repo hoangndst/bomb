@@ -10,35 +10,38 @@ import com.bom.game.screen.GameScreen;
 
 public class Portal extends TileBase {
 
-    private TiledMap map;
+	private TiledMap map;
 
-    public Portal(GameScreen gameScreen, Rectangle bounds) {
-        super(gameScreen, bounds);
-        this.map = gameScreen.getMap();
-        setCollisionFilter(BitCollision.ITEM,
-            BitCollision.orOperation(
-            BitCollision.BOMBERMAN
-        ));
-        this.type = Type.PORTAL;
-        this.body.getFixtureList().get(0).setSensor(true);
-    }
+	public Portal(GameScreen gameScreen, Rectangle bounds) {
+		super(gameScreen, bounds);
+		this.map = gameScreen.getMap();
+		setCollisionFilter(BitCollision.ITEM,
+				BitCollision.orOperation(BitCollision.BOMBERMAN));
+		this.type = Type.PORTAL;
+		this.body.getFixtureList().get(0).setSensor(true);
+	}
 
-    private TiledMapTileLayer.Cell getCell() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("item");
-        // System.err.println((int) body.getPosition().x + ", " +  (int) body.getPosition().y);
-        return layer.getCell((int) body.getPosition().x, (int) body.getPosition().y);
+	private TiledMapTileLayer.Cell getCell() {
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers()
+				.get("item");
+		// System.err.println((int) body.getPosition().x + ", " + (int)
+		// body.getPosition().y);
+		return layer.getCell((int) body.getPosition().x,
+				(int) body.getPosition().y);
 
-    }
+	}
 
-    public void handleAction() {
-        // getCell().setTile(null);
-        if (GameManager.bombermanHasKey) {
-            GameManager.bombermanInPortal = true;
-            Filter newFilter = new Filter();
-            newFilter.categoryBits = BitCollision.DESTROYED_BRICK;
-            newFilter.maskBits = fixture.getFilterData().maskBits;
-            fixture.setFilterData(newFilter);
-        }
-    }
-    
+	@Override
+	public void handleAction() {
+		// getCell().setTile(null);
+		if (GameManager.bombermanHasKey
+				&& gameScreen.entityCreator.entityManager.enemiesIsClear()) {
+			GameManager.bombermanInPortal = true;
+			Filter newFilter = new Filter();
+			newFilter.categoryBits = BitCollision.DESTROYED_BRICK;
+			newFilter.maskBits = fixture.getFilterData().maskBits;
+			fixture.setFilterData(newFilter);
+		}
+	}
+
 }
