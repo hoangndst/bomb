@@ -106,7 +106,7 @@
   <object id="123" x="176.375" y="177.625" width="13.25" height="12.375"/>
  </objectgroup>
  <objectgroup id="13" name="key">
-  <object id="116" x="32" y="32" width="16" height="16"/>
+  <object id="116" x="32.6522" y="32.6522" width="14.6957" height="14.6957"/>
  </objectgroup>
  <objectgroup id="14" name="portal">
   <object id="117" x="128" y="48" width="16" height="16"/>

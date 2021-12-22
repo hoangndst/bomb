@@ -53,7 +53,8 @@ public class GameScreen implements Screen {
 	private Window pauseWindow;
 	private TextButton audiButton;
 
-	public GameScreen(BomGame bomGame) {
+	public GameScreen(BomGame bomGame, int level) {
+		GameManager.CurrentLevel = level;
 		this.bomGame = bomGame;
 		world = new World(new Vector2(0, 0), true);
 		camera = new OrthographicCamera();
@@ -61,18 +62,20 @@ public class GameScreen implements Screen {
 				GameManager.HEIGHT / GameManager.PPM, camera);
 		camera.position.set(viewport.getWorldWidth() / 2,
 				viewport.getWorldHeight() / 2, 0);
-		map = new TmxMapLoader().load("map1.tmx");
+		map = new TmxMapLoader().load("map" + level + ".tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / GameManager.PPM);
 		entityCreator = new EntityCreator(this);
 		entityCreator.createEntity();
 		bombPool = new BombPool();
-		bomberman = new Bomberman(this, new Vector2(8, 8));
+		bomberman = new Bomberman(this, new Vector2(8, level == 1 ? 8 : 1));
 		world.setContactListener(new WorldContactListener());
 		b2dr = new Box2DDebugRenderer();
 		skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
 		audiButton = new TextButton(
 				GameManager.audioEnabled ? "Audio: ON" : "Audio: OFF", skin);
 		hud = new Hud(bomGame.getSpriteBatch());
+		GameManager.bombermanHasKey = false;
+		GameManager.bombermanInPortal = false;
 	}
 
 	private void update(float delta) {
@@ -85,10 +88,16 @@ public class GameScreen implements Screen {
 			bomGame.setScreen(new GameOverScreen(bomGame));
 		}
 		hud.update(delta);
+		System.out.println(GameManager.bombermanHasKey + " "
+				+ GameManager.bombermanInPortal + " "
+				+ entityCreator.entityManager.enemiesIsClear());
 		if (GameManager.bombermanHasKey && GameManager.bombermanInPortal
 				&& entityCreator.entityManager.enemiesIsClear()) {
-
-			bomGame.setScreen(new VictoryScreen(bomGame));
+			if (GameManager.CurrentLevel == 1) {
+				bomGame.setScreen(new GameScreen(bomGame, 2));
+			} else {
+				bomGame.setScreen(new VictoryScreen(bomGame));
+			}
 		}
 	}
 
@@ -130,15 +139,17 @@ public class GameScreen implements Screen {
 				GameManager.getInstance().pauseMusic();
 			} else {
 				GameManager.getInstance().playSound("Pause.ogg");
-				GameManager.getInstance().playMusic("SuperBomberman-Area1.ogg",
-						true);
+				GameManager.getInstance().playMusic("SuperBomberman-Area"
+						+ GameManager.CurrentLevel + ".ogg", true);
 			}
 		}
 	}
 
 	@Override
 	public void show() {
-		GameManager.getInstance().playMusic("SuperBomberman-Area1.ogg", true);
+		GameManager.getInstance().playMusic(
+				"SuperBomberman-Area" + GameManager.CurrentLevel + ".ogg",
+				true);
 		stage = new Stage(
 				new FitViewport(GameManager.WIDTH, GameManager.HEIGHT),
 				bomGame.batch);
@@ -153,8 +164,8 @@ public class GameScreen implements Screen {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				paused = false;
-				GameManager.getInstance().playMusic("SuperBomberman-Area1.ogg",
-						true);
+				GameManager.getInstance().playMusic("SuperBomberman-Area"
+						+ GameManager.CurrentLevel + ".ogg", true);
 			}
 		});
 

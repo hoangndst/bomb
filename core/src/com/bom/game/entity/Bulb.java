@@ -27,7 +27,7 @@ public class Bulb extends EnemyBase {
 	private AnimationHandle animationHandle;
 	private float FRAME_TIME = 0.6f;
 	private float speed = 2.5f;
-	private float bodyDiameter = 0.95f;
+	private float bodyDiameter = 0.875f;
 	public Body body;
 	private static BodyDef bDef = new BodyDef();
 	private static FixtureDef fDef = new FixtureDef();
@@ -78,8 +78,9 @@ public class Bulb extends EnemyBase {
 	}
 
 	private void randomMove(float delta) {
-		Node node = GameManager.getInstance().pathfinder
-		.findNextNode(this.body.getPosition(), gameScreen.bomberman.body.getPosition());
+		Node node = GameManager.getInstance().pathfinder.findNextNode(
+				this.body.getPosition(),
+				gameScreen.bomberman.body.getPosition());
 		System.err.println(node);
 		if (node != null) {
 			System.err.println("Body: " + this.body.getPosition().x + " "
@@ -90,11 +91,14 @@ public class Bulb extends EnemyBase {
 			float yTarget = node.y + 0.5f;
 			if (xSource < xTarget && Math.abs(ySource - yTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(speed, 0));
-			} else if (xSource > xTarget && Math.abs(ySource - yTarget) < 0.2f) {
+			} else if (xSource > xTarget
+					&& Math.abs(ySource - yTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(-speed, 0));
-			}else if (ySource < yTarget && Math.abs(xSource - xTarget) < 0.2f) {
+			} else if (ySource < yTarget
+					&& Math.abs(xSource - xTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(0, speed));
-			} else if (ySource > yTarget && Math.abs(xSource - xTarget) < 0.2f) {
+			} else if (ySource > yTarget
+					&& Math.abs(xSource - xTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(0, -speed));
 			}
 		} else {
@@ -141,15 +145,16 @@ public class Bulb extends EnemyBase {
 		} else {
 			randomMove(delta);
 		}
-		sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-				UnitHelper.box2DToScreen(body.getPosition().y, 0.875f),
+		sprite.setBounds(
+				UnitHelper.box2DToScreen(body.getPosition().x, bodyDiameter),
+				UnitHelper.box2DToScreen(body.getPosition().y, bodyDiameter),
 				UnitHelper.pixelsToMeters(
 						animationHandle.getCurrentFrame().getRegionWidth()),
 				UnitHelper.pixelsToMeters(
 						animationHandle.getCurrentFrame().getRegionHeight()));
 		sprite.setPosition(
-				UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-				UnitHelper.box2DToScreen(body.getPosition().y, 0.875f));
+				UnitHelper.box2DToScreen(body.getPosition().x, bodyDiameter),
+				UnitHelper.box2DToScreen(body.getPosition().y, bodyDiameter));
 		sprite.setRegion(animationHandle.getCurrentFrame());
 	}
 
