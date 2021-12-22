@@ -61,12 +61,12 @@ public class GameScreen implements Screen {
 				GameManager.HEIGHT / GameManager.PPM, camera);
 		camera.position.set(viewport.getWorldWidth() / 2,
 				viewport.getWorldHeight() / 2, 0);
-		map = new TmxMapLoader().load("map2.tmx");
+		map = new TmxMapLoader().load("map1.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1 / GameManager.PPM);
 		entityCreator = new EntityCreator(this);
 		entityCreator.createEntity();
 		bombPool = new BombPool();
-		bomberman = new Bomberman(this, new Vector2(8, 1));
+		bomberman = new Bomberman(this, new Vector2(8, 8));
 		world.setContactListener(new WorldContactListener());
 		b2dr = new Box2DDebugRenderer();
 		skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
