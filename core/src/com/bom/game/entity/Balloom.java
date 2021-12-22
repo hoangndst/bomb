@@ -26,7 +26,7 @@ public class Balloom extends EnemyBase {
 	private float FRAME_TIME = 0.6f;
 	private float speed = 2.5f;
 	public Body body;
-	private float bodyDiameter = 0.95f;
+	private float bodyDiameter = 0.875f;
 	private static BodyDef bDef = new BodyDef();
 	private static FixtureDef fDef = new FixtureDef();
 	private String playerPath = "balloom.atlas";
@@ -132,15 +132,16 @@ public class Balloom extends EnemyBase {
 		} else {
 			randomMove(delta);
 		}
-		sprite.setBounds(UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-				UnitHelper.box2DToScreen(body.getPosition().y, 0.875f),
+		sprite.setBounds(
+				UnitHelper.box2DToScreen(body.getPosition().x, bodyDiameter),
+				UnitHelper.box2DToScreen(body.getPosition().y, bodyDiameter),
 				UnitHelper.pixelsToMeters(
 						animationHandle.getCurrentFrame().getRegionWidth()),
 				UnitHelper.pixelsToMeters(
 						animationHandle.getCurrentFrame().getRegionHeight()));
 		sprite.setPosition(
-				UnitHelper.box2DToScreen(body.getPosition().x, 0.875f),
-				UnitHelper.box2DToScreen(body.getPosition().y, 0.875f));
+				UnitHelper.box2DToScreen(body.getPosition().x, bodyDiameter),
+				UnitHelper.box2DToScreen(body.getPosition().y, bodyDiameter));
 		sprite.setRegion(animationHandle.getCurrentFrame());
 	}
 
