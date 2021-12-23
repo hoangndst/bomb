@@ -41,6 +41,7 @@ public class MenuScreen implements Screen {
 	private boolean selected;
 
 	public MenuScreen(BomGame game) {
+		GameManager.score = 0;
 		GameManager.getInstance().reset();
 		this.game = game;
 		this.batch = game.getSpriteBatch();
