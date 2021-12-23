@@ -1,7 +1,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/hoangndst/bomb#readme">
-    <img src="core\assets\img\logo.gif" alt="icon" width="450" height="200">
+    <img src="core/assets/img/logo.gif" alt="icon" width="450" height="200">
   </a>
 
   <h3 align="center"><strong>Super Bomberman</strong></h3>
