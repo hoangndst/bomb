@@ -41,7 +41,9 @@
 
 ## Introduction
 
-Bomberman is a legendary game that has been around for a long time. It is a game where you control a character called a Bomberman and you must destroy all the bombs that are scattered around the map. The bombs are scattered around the map and you must destroy them in order to win the game.
+Bomberman is a legendary game that has been around for a long time. It is a game where you control a character called a Bomberman and you must destroy all the enemy that are scattered around the map. The enemy are scattered around the map and you must destroy them in order to win the game.
+
+We created this game within 4 days so the code is not optimized. We will fix it soon when we have time, if we're lazy, it's probably never :)))
 
 ### Bomberman
 ![Bomberman](core/assets/bomberman.png)
