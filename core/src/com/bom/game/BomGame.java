@@ -10,15 +10,7 @@ import com.bom.game.screen.VictoryScreen;
 public class BomGame extends Game {
     public SpriteBatch batch;
     Texture img;
-    // public static final float SCALE = 3;
     public GameScreen gameScreen;
-
-    // public static final short GROUND_BIT = 1;
-    // public static final short PLAYER_BIT = 2;
-    // public static final short BOMB_BIT = 4;
-    // public static final short WALL_BIT = 8;
-    // public static final short ENEMY_BIT = 16;
-    // public static final short DESTROYED_BIT = 32;
 
     @Override
     public void create() {

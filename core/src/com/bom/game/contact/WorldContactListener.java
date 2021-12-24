@@ -7,11 +7,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.bom.game.entity.Bomb;
 import com.bom.game.entity.Bomberman;
-import com.bom.game.entity.Brick;
-import com.bom.game.entity.EnemyBase;
 import com.bom.game.entity.EntityBase;
-import com.bom.game.entity.TileBase;
-import com.bom.game.entity.TileBase.Type;
+import com.bom.game.entity.Enemy.EnemyBase;
+import com.bom.game.entity.Tiles.Brick;
+import com.bom.game.entity.Tiles.TileBase;
+import com.bom.game.entity.Tiles.TileBase.Type;
 import com.bom.game.manager.GameManager;
 import com.bom.game.modules.BitCollision;
 

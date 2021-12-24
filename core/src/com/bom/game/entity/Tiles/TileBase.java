@@ -1,4 +1,4 @@
-package com.bom.game.entity;
+package com.bom.game.entity.Tiles;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.math.Rectangle;

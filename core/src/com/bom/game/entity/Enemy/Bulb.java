@@ -1,4 +1,4 @@
-package com.bom.game.entity;
+package com.bom.game.entity.Enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bom.game.ai.Node;
 import com.bom.game.animation.AnimationHandle;
+import com.bom.game.entity.Bomb;
+import com.bom.game.entity.EntityManager;
 import com.bom.game.manager.GameManager;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.modules.Hud;
