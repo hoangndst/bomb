@@ -1,4 +1,4 @@
-package com.bom.game.entity;
+package com.bom.game.entity.Enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;

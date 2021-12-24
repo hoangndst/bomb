@@ -1,6 +1,8 @@
-package com.bom.game.entity;
+package com.bom.game.entity.Enemy;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.bom.game.entity.EntityBase;
+import com.bom.game.entity.EntityManager;
 
 public abstract class EnemyBase extends EntityBase {
 

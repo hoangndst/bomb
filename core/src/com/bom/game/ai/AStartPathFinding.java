@@ -72,7 +72,6 @@ public class AStartPathFinding {
                 if (node.isWall) {
                     continue;
                 } 
-                // Add a connection for each valid neighbor
                 for (int offset = 0; offset < NEIGHBORHOOD.length; offset++) {
                     int neighborX = node.x + NEIGHBORHOOD[offset][0];
                     int neighborY = node.y + NEIGHBORHOOD[offset][1];
@@ -80,7 +79,6 @@ public class AStartPathFinding {
                         Node neighbor = map.getNodeAt(neighborX, neighborY);
                         if (!neighbor.isWall) {
                             // System.err.println(neighborX + ", " + neighborY);
-                            // Add connection to walkable neighbor
                             node.getConnections().add(new DefaultConnection<Node>(node, neighbor));
                         }
                     }

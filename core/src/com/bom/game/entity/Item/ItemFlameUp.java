@@ -1,9 +1,11 @@
-package com.bom.game.entity;
+package com.bom.game.entity.Item;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.bom.game.entity.Tiles.TileBase;
+import com.bom.game.entity.Tiles.TileBase.Type;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.screen.GameScreen;
 

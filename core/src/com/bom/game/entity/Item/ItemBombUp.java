@@ -1,24 +1,26 @@
-package com.bom.game.entity;
+package com.bom.game.entity.Item;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.bom.game.entity.Tiles.TileBase;
+import com.bom.game.entity.Tiles.TileBase.Type;
 import com.bom.game.modules.BitCollision;
 import com.bom.game.screen.GameScreen;
 
-public class ItemSpeedUp extends TileBase {
+public class ItemBombUp extends TileBase {
 
     private TiledMap map;
 
-    public ItemSpeedUp(GameScreen gameScreen, Rectangle bounds) {
+    public ItemBombUp(GameScreen gameScreen, Rectangle bounds) {
         super(gameScreen, bounds);
         this.map = gameScreen.getMap();
         setCollisionFilter(BitCollision.ITEM,
             BitCollision.orOperation(
             BitCollision.BOMBERMAN
         ));
-        this.type = Type.SPEED_UP;
+        this.type = Type.BOMB_UP;
         this.body.getFixtureList().get(0).setSensor(true);
     }
 
