@@ -71,7 +71,7 @@
   <object id="166" x="64" y="48" width="48" height="16"/>
   <object id="168" x="64" y="16" width="16" height="32"/>
   <object id="169" x="32" y="16" width="32" height="16"/>
-  <object id="170" x="128" y="0" width="16" height="32"/>
+  <object id="170" x="128" y="0" width="16" height="48"/>
   <object id="171" x="48" y="96" width="16" height="16"/>
   <object id="172" x="80" y="96" width="16" height="16"/>
   <object id="173" x="112" y="96" width="16" height="16"/>
@@ -155,7 +155,7 @@
   <object id="195" x="194.182" y="162" width="12.1818" height="11.8182">
    <ellipse/>
   </object>
-  <object id="196" x="50.3636" y="113.818" width="11.2727" height="11.8182">
+  <object id="196" x="50.6136" y="113.818" width="11.2727" height="11.8182">
    <ellipse/>
   </object>
  </objectgroup>
