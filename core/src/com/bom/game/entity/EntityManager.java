@@ -72,7 +72,7 @@ public class EntityManager {
 	public void update(float delta) {
 		// updateMap();
 		updateAStarMap();
-		// test();
+		test();
 		// for (EnemyBase enemy : enemies) {
 		// Bulb bulb = (Bulb) enemy;
 		// GameManager.getInstance().pathfinder = new
@@ -147,6 +147,14 @@ public class EntityManager {
 	}
 
 	public void createMapArray() {
+		map.clear();
+		for (int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
+			ArrayList<Integer> row = new ArrayList<>();
+			map.add(row);
+			for (int j = 0; j < GameManager.WIDTH / GameManager.PPM; j++) {
+				map.get(i).add(0);
+			}
+		}
 		for (int i = 0; i < this.walls.size(); i++) {
 			float x = this.walls.get(i).body.getPosition().x;
 			float y = this.walls.get(i).body.getPosition().y;
