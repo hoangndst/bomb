@@ -17,7 +17,7 @@ public class EntityManager {
 	private ArrayList<EntityBase> entities;
 	private ArrayList<EnemyBase> enemies;
 	private ArrayList<TileBase> items;
-	public ArrayList<ArrayList<Integer>> map = new ArrayList<>();
+	public static ArrayList<ArrayList<Integer>> map = new ArrayList<>();
 	private ArrayList<ArrayList<Integer>> initMap = new ArrayList<>();
 	private GameScreen gameScreen;
 	public static AStarMap aStarMap;
