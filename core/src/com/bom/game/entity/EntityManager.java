@@ -77,7 +77,7 @@ public class EntityManager {
 	public void update(float delta) {
 		// updateMap();
 		updateAStarMap();
-		test();
+		// test();
 		// for (EnemyBase enemy : enemies) {
 		// Bulb bulb = (Bulb) enemy;
 		// GameManager.getInstance().pathfinder = new
