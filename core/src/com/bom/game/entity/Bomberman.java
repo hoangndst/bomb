@@ -33,7 +33,7 @@ public class Bomberman extends EntityBase implements Disposable {
 	private float FRAME_TIME = 0.6f;
 	private float speed = 2.5f;
 	public Body body;
-	private float bodyDiameter = 0.95f;
+	private float bodyDiameter = 0.875f;
 	private static BodyDef bDef = new BodyDef();
 	private static FixtureDef fDef = new FixtureDef();
 	private String playerPath = "bomberman.atlas";

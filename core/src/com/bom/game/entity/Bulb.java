@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -91,35 +92,87 @@ public class Bulb extends EnemyBase {
 			float yTarget = node.y + 0.5f;
 			if (xSource < xTarget && Math.abs(ySource - yTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(speed, 0));
-			} else if (xSource > xTarget
-					&& Math.abs(ySource - yTarget) < 0.2f) {
+			} else if (xSource > xTarget && Math.abs(ySource - yTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(-speed, 0));
-			} else if (ySource < yTarget
-					&& Math.abs(xSource - xTarget) < 0.2f) {
+			} else if (ySource < yTarget && Math.abs(xSource - xTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(0, speed));
-			} else if (ySource > yTarget
-					&& Math.abs(xSource - xTarget) < 0.2f) {
+			} else if (ySource > yTarget && Math.abs(xSource - xTarget) < 0.2f) {
 				body.setLinearVelocity(new Vector2(0, -speed));
 			}
 		} else {
-			timeMove -= delta;
-			if (timeMove <= 0) {
-				int random = getRandomNumber(1, 5);
-				switch (random) {
-					case 1 :
-						body.setLinearVelocity(new Vector2(speed, 0));
-						break;
-					case 2 :
-						body.setLinearVelocity(new Vector2(-speed, 0));
-						break;
-					case 3 :
-						body.setLinearVelocity(new Vector2(0, speed));
-						break;
-					case 4 :
-						body.setLinearVelocity(new Vector2(0, -speed));
-						break;
+			Bomb bomb = new Bomb();
+			float dis = 1000000f;
+			for (Bomb b : gameScreen.bomberman.getBombs()) {	
+				if (UnitHelper.distance(this.body.getPosition(), b.body.getPosition()) < dis) {
+					bomb = b;
+					dis = UnitHelper.distance(this.body.getPosition(), b.body.getPosition());
 				}
-				timeMove = 3f;
+			}
+			if (dis < 2f) {
+				float xSource = this.body.getPosition().x;
+				float ySource = this.body.getPosition().y;
+				float xTarget = bomb.body.getPosition().x;
+				float yTarget = bomb.body.getPosition().y;
+				int x = MathUtils.floor(xSource);
+				int y = MathUtils.floor(ySource);
+				System.err.println("Bulb: " + x + " " + y);
+				int yMap = GameManager.mapHeight - 1 - y;
+				System.err.println(EntityManager.map.get(yMap).get(x + 1) + " " + EntityManager.map.get(yMap).get(x - 1)
+						+ " " + EntityManager.map.get(yMap - 1).get(x) + " "
+						+ EntityManager.map.get(yMap + 1).get(x));
+				if (ySource <= yTarget && Math.abs(xSource - xTarget) < 0.2f) {
+					if (EntityManager.map.get(yMap).get(x + 1) == 0 && (0.44 < (ySource - y) && (ySource - y) < 0.56)) {
+						body.setLinearVelocity(new Vector2(speed, 0));
+					} else if (EntityManager.map.get(yMap).get(x - 1) == 0 && (0.44 < (ySource - y) && (ySource - y) < 0.56)) {
+						body.setLinearVelocity(new Vector2(-speed, 0));
+					} else if (EntityManager.map.get(yMap + 1).get(x) == 0) {
+						body.setLinearVelocity(new Vector2(0, -speed));
+					}
+				} else if (ySource >= yTarget && Math.abs(xSource - xTarget) < 0.2f) {
+					if (EntityManager.map.get(yMap).get(x + 1) == 0 && (0.44 < (ySource - y) && (ySource - y) < 0.56)) {
+						body.setLinearVelocity(new Vector2(speed, 0));
+					} else if (EntityManager.map.get(yMap).get(x - 1) == 0 && (0.44 < (ySource - y) && (ySource - y) < 0.56)) {
+						body.setLinearVelocity(new Vector2(-speed, 0));
+					} else if (EntityManager.map.get(yMap - 1).get(x) == 0) {
+						body.setLinearVelocity(new Vector2(0, speed));
+					}
+				} else if (xSource <= xTarget && Math.abs(ySource - yTarget) < 0.2f) {
+					if (EntityManager.map.get(yMap + 1).get(x) == 0 && (0.44 < (xSource - x) && (xSource - x) < 0.56)) {
+						body.setLinearVelocity(new Vector2(0, -speed));
+					} else if (EntityManager.map.get(yMap - 1).get(x) == 0 && (0.44 < (xSource - x) && (xSource - x) < 0.56)) {
+						body.setLinearVelocity(new Vector2(0, speed));
+					} else if (EntityManager.map.get(yMap).get(x - 1) == 0) {
+						body.setLinearVelocity(new Vector2(-speed, 0));
+					}
+				} else if (xSource >= xTarget && Math.abs(ySource - yTarget) < 0.2f) {
+					if (EntityManager.map.get(yMap + 1).get(x) == 0 && (0.44 < (xSource - x) && (xSource - x) < 0.56)) {
+						body.setLinearVelocity(new Vector2(0, -speed));
+					} else if (EntityManager.map.get(yMap - 1).get(x) == 0 && (0.44 < (xSource - x) && (xSource - x) < 0.56)) {
+						body.setLinearVelocity(new Vector2(0, speed));
+					} else if (EntityManager.map.get(yMap).get(x + 1) == 0) {
+						body.setLinearVelocity(new Vector2(speed, 0));
+					}
+				}
+			} else {
+				timeMove -= delta;
+				if (timeMove <= 0) {
+					int random = getRandomNumber(1, 5);
+					switch (random) {
+						case 1 :
+							body.setLinearVelocity(new Vector2(speed, 0));
+							break;
+						case 2 :
+							body.setLinearVelocity(new Vector2(-speed, 0));
+							break;
+						case 3 :
+							body.setLinearVelocity(new Vector2(0, speed));
+							break;
+						case 4 :
+							body.setLinearVelocity(new Vector2(0, -speed));
+							break;
+					}
+					timeMove = 3f;
+				}
 			}
 		}
 	}

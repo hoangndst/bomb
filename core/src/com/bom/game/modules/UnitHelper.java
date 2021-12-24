@@ -57,4 +57,8 @@ public abstract class UnitHelper {
     public static float metersToPixels(float meters) {
         return meters * GameManager.PPM;
     }
+
+    public static float distance(Vector2 v1, Vector2 v2) {
+        return v1.dst(v2);
+    }
 }
