@@ -84,10 +84,10 @@ public class Bulb extends EnemyBase {
 		Node node = GameManager.getInstance().pathfinder.findNextNode(
 				this.body.getPosition(),
 				gameScreen.bomberman.body.getPosition());
-		System.err.println(node);
+		// System.err.println(node);
 		if (node != null) {
-			System.err.println("Body: " + this.body.getPosition().x + " "
-					+ this.body.getPosition().y);
+			// System.err.println("Body: " + this.body.getPosition().x + " "
+			// 		+ this.body.getPosition().y);
 			float xSource = this.body.getPosition().x;
 			float ySource = this.body.getPosition().y;
 			float xTarget = node.x + 0.5f;

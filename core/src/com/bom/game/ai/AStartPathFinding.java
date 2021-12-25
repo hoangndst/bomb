@@ -37,8 +37,8 @@ public class AStartPathFinding {
         int sourceY = MathUtils.floor(source.y);
         int targetX = MathUtils.floor(target.x);
         int targetY = MathUtils.floor(target.y);
-        System.err.println("source: " + sourceX + ", " + sourceY);
-        System.err.println("target: " + targetX + ", " + targetY);
+        // System.err.println("source: " + sourceX + ", " + sourceY);
+        // System.err.println("target: " + targetX + ", " + targetY);
         if (map == null
                || sourceX < 0 || sourceX >= map.getWidth()
                || sourceY < 0 || sourceY >= map.getHeight()
