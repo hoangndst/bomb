@@ -88,7 +88,7 @@ public class EntityManager {
 		// .pathfinder.findNextNode(bulb.body.getPosition(), new Vector2(8,
 		// 8)));
 		// }
-		System.out.println(enemies.size());
+		// System.out.println(enemies.size());
 		// for(int i = 0; i < GameManager.HEIGHT / GameManager.PPM; i++) {
 		// for(int j = 0; j < GameManager.WIDTH / GameManager.PPM; j++) {
 		// System.err.print(map.get(i).get(j) + " ");
@@ -106,7 +106,7 @@ public class EntityManager {
 			}
 
 		}
-        System.err.println(removeEnemies.size());
+        // System.err.println(removeEnemies.size());
 		if (removeEnemies.size() > 0) {
             for (EnemyBase enemy : removeEnemies) {
                 enemies.remove(enemy);

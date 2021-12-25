@@ -88,9 +88,9 @@ public class GameScreen implements Screen {
 			bomGame.setScreen(new GameOverScreen(bomGame));
 		}
 		hud.update(delta);
-		System.out.println(GameManager.bombermanHasKey + " "
-				+ GameManager.bombermanInPortal + " "
-				+ entityCreator.entityManager.enemiesIsClear());
+		// System.out.println(GameManager.bombermanHasKey + " "
+		// 		+ GameManager.bombermanInPortal + " "
+		// 		+ entityCreator.entityManager.enemiesIsClear());
 		if (GameManager.bombermanHasKey && GameManager.bombermanInPortal
 				&& entityCreator.entityManager.enemiesIsClear()) {
 			if (GameManager.CurrentLevel == 1) {
