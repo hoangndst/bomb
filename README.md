@@ -87,7 +87,5 @@ Bomberman is a character that you control. You can move it around the map and yo
 - [Libgdx](https://libgdx.badlogicgames.com/)
 - [Gdx-ai](https://github.com/libgdx/gdx-ai)
 
-### Contributor: [@hoangndst](https://github.com/hoangndst), [@naslth](https://github.com/naslth).
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
